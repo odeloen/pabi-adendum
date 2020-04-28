@@ -1,0 +1,57 @@
+
+DATA IDI
+spesialis
+minat_bidang
+tempat_kerja
+alamat_kerja
+jabatan
+npa_idi
+tmt_npa
+cabang
+card_no
+issue_card_no
+valid_until_card_no
+finacs
+valid_until_finacs
+no_pabi
+issue_card_no_pabi
+valid_until_card_no_pabi
+no_str
+sjk_tahun_no_str
+
+
+
+IDENTITAS DIRI
+nama 
+panggilan (belum ada di dbase)
+gelar 
+tempat_lahir (Dari Master kabupaten)
+tgl_lahir
+gender (L, P)
+alamat_rumah
+kota (Dari Master kabupaten)
+telp
+hobi
+
+DATA ISTRI / SUAMI
+nama_pasangan
+tempat_lahir_pasangan (Dari Master kabupaten)
+tgl_lahir_pasangan
+alamat_rumah_pasangan
+kota_pasangan (Dari Master kabupaten)
+pekerjaan_pasangan
+
+DATA ANAK (Bisa banyak)
+nama_anak
+tempat_lahir_anak (Dari Master kabupaten)
+tgl_lahir_anak
+gender_anak (L, P)
+
+PENDIDIKAN (Bisa Banyak)
+jenjang_pendidikan (S1, S2, S3, Spesialis)
+jurusan
+tgl_lulus
+
+
+
+

@@ -1,0 +1,70 @@
+
+
+Notif kurang : 
+1. (admin) ada pembayaran masuk ke admin
+2. (member) pembayaran sudah di centang bayar oleh admin
+
+
+Update 5 Des
+1. Tentang Pabi selesai master2 di user pabiadmin
+2. Rumah Berita & Acara (Landing Page sudah semua)
+3. Tombol verifikasi hilang
+
+PR 28 nov
+1. Event cabang bisa pilih status independen / nunut simposium
+2. Member Sudah Verif, tombol verifikasi diilangin
+3. Member sudah di verif cabang, stautsnya di periksa lagi
+4. Pindah Cabang sudah verif, tombol verifikasi diilangin
+5. Pindah Cabang, detail diganti riwayat pengajuan
+6. Detail dokter, data kantor
+7. Dashboard
+
+PR kedepan
+1. - dashboard
+2. DONE BACKEND rekap kredit poin
+3. DONE profile lengkap dokter
+4. Beranda, Berita & Acara, Dokter Bedah, Artikel Kesehatan (ngelink ke frandita), Tentang PABI
+5. DONE head menu
+
+
+Update event : 
+1. absensi per tanggal sesuai tidak
+2. absensi member ada atau tidak
+3. absensi member sudah bayar atau tidak
+4. verifikasi pindah cabang
+5. verifikasi borang
+6. permapingan landing page
+
+
+5 Nov 2019
+
+Update Progress Borang : 
+1. Form2 borang
+2. nasrul yang tau
+
+Update Progress event
+1. barcode berisi detail event serta direction lokasi event (bisa langsung dicoba)
+2. Halaman Invoice serta detail event sudah selesai
+3. encrypt id event, jika diperhatikan di halaman detail event, absensi, di urlnya ada kode aneh itu adalah encryptan kode event
+4. kondisi2 event = 
+	1. peserta daftar
+	2. jika dalam waktu yang sudah ditentukan tidak kunjung bayar, maka expired
+	3. jika sudah bayar, maka kuota akan langsung berkurang dan admin bisa memverifikasi
+	4. jika sudah bayar, ternyata ada kondisi admin menolak, maka kuota bertambah lagi
+5. sudah bisa verifikasi pembayaran sampai admin pusat verifikasi, contohinnya yang event pusat
+
+Update Progress Pabi di user Super Admin nangning
+1. Master Rumah Sakit 
+2. Master Minat Bidang
+3. Master Banner (untuk di halaman sebelum login, sudah di tempel ke halaman depan)
+4. Master Berita (untuk di halaman sebelum login, masternya sudah tapi belum di tempel)
+5. Master User Proses Frontend (Coming Soon, rencananya isinya lock unlock user dan reset password)
+
+Update Progress Data
+1. Data dokter dari PABI Keuangan sama2 tidak standarnya
+2. Kodig sudah menstandarkan seperti
+	*. Tempat Lahir
+	*. tanggal2
+	*. jenis kelamin
+	*. Nama2 Kota
+3. Kendala itu masih terdata sebagai member saja tanpa mempunyai username, jadinya maunya usernamenya apa ya ?

@@ -1,0 +1,45 @@
+.onoffswitch_expired {
+    position: relative; width: 130px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch_expired-checkbox {
+    display: none;
+}
+.onoffswitch_expired-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #FFFFFF; border-radius: 18px;
+}
+.onoffswitch_expired-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch_expired-inner:before, .onoffswitch_expired-inner:after {
+    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+    font-size: 13px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch_expired-inner:before {
+    content: "Menunggu";
+    padding-left: 10px;
+    background-color: #55EFC4; color: #FFFFFF;
+}
+.onoffswitch_expired-inner:after {
+    content: "Expired";
+    padding-right: 10px;
+    background-color: #FF7675; color: #FFFFFF;
+    text-align: right;
+}
+.onoffswitch_expired-switch {
+    display: block; width: 20px; margin: 5px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 96px;
+    border: 2px solid #FFFFFF; border-radius: 18px;
+    transition: all 0.3s ease-in 0s; 
+}
+.onoffswitch_expired-checkbox:checked + .onoffswitch_expired-label .onoffswitch_expired-inner {
+    margin-left: 0;
+}
+.onoffswitch_expired-checkbox:checked + .onoffswitch_expired-label .onoffswitch_expired-switch {
+    right: 0px; 
+}
