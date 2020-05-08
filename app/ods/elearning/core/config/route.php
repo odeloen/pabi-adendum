@@ -24,7 +24,3 @@ Route::prefix('member')
 Route::prefix('public')
      ->namespace('App\Ods\Elearning\General\Controllers')
      ->group(base_path('app/ods/elearning/general/config/route.php'));
-
-Route::prefix('test')
-    ->namespace('App\Ods\Elearning\Course\Presenter\Controllers')
-    ->group(base_path('app/ods/elearning/course/presenter/config/route.php'));
