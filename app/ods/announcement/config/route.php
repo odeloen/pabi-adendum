@@ -2,8 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
-view()->addNamespace('Ods\Announcement\Member', app_path('ods/announcement/member/views/'));
-view()->addNamespace('Ods\Announcement\Admin', app_path('ods/announcement/admin/views/'));
+view()->addNamespace('Ods\Announcement', app_path('ods/announcement/presenter/views'));
+
+Route::namespace('App\Ods\Announcement\Presenter\Controllers\View')->prefix('view/')->name('view.')->group(function (){
+    Route::get('list', 'AdminController@list')->name('list');
+    Route::get('show', 'AdminController@show')->name('show');
+});
 
 Route::namespace('App\Ods\Announcement\Presenter\Controllers\Web')->prefix('admin/')->name('admin.')->group(function (){
     Route::post('create', 'AdminAnnouncementController@create')->name('create');
