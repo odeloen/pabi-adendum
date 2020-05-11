@@ -2,8 +2,8 @@
 
 view()->addNamespace('Ods\Elearning\Quiz', app_path('ods/elearning/quiz/presenter/views'));
 
-Route::namespace('Web')->group(function () {
+Route::namespace('Web')->middleware(['web'])->group(function () {
     Route::get("test", function(){
-        return view('Ods\Elearning\Quiz::dummy');
+        return view('Ods\Elearning\Quiz::lecturer.dummy');
     });
 });
