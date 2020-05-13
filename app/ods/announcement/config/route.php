@@ -19,3 +19,14 @@ Route::namespace('App\Ods\Announcement\Presenter\Controllers\Web')->prefix('admi
 Route::namespace('')->prefix('api')->middleware(['api'])->group(function () {
 
 });
+
+Route::namespace('Web')->middleware(['web'])->group(function () {
+    Route::get("admin-list", function(){
+        return view('Ods\Announcement::admin.list');
+    });
+
+    Route::get("member-list", function(){
+        return view('Ods\Announcement::member.list');
+    });
+});
+

@@ -651,6 +651,8 @@ $role_admin = array(1, 2, 3);
 						</li>
 						@endif
 						@if(in_array(request()->session()->get('pabi_role_id'), [1, 2])) 
+						
+							<li class="dashboard"><a href="" class="legitRipple"><i class=" icon-newspaper"></i> <span>Announcement</span></a></li>
 							<li>
 								<a href="#"><i class="icon-coins"></i>
 									<span>Iuran</span></a>
