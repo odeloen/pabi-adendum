@@ -23,30 +23,35 @@
         Kelas ini sedang dalam proses verifikasi admin
     </div>
 @endif
-<div class="panel panel-flat border-top-xlg border-top-indigo">
-    <div class="panel-heading" style="margin-bottom:-10px">
-        <h5 class="panel-title"><span class="text-semibold">{{$material->instance->name}}</h5>
-        oleh <span class="text-primary">{{$lecturer->fullname}}</span>
-        <br>
-        diperbarui <span style="color: #3F51B5">{{$material->instance->updated_at_string}}</span>
-        <br>
-        dari Kelas {{$course->instance->name}}, Topik {{$topic->instance->name}}
-        <br>
-        <span style="font-style:italic">Materi ini bersifat
-            @if ($material->instance->isPublic())
-                umum
-            @else
-                tidak umum
-            @endif
-        </span>
-        <div class="heading-elements">
-            <a href="{{route('lecturer.material.edit', [$course->instance->id, $topic->instance->id, $material->instance->id])}}">
-                <button class="btn bg-primary">Edit Materi</button>
-            </a>
+<div class="col-lg-9">
+    <div class="panel panel-flat border-top-xlg border-top-indigo">
+        <div class="panel-heading" style="margin-bottom:-10px">
+            <h5 class="panel-title"><span class="text-semibold">{{$material->instance->name}}</h5>
+            oleh <span class="text-primary">{{$lecturer->fullname}}</span>
+            <br>
+            diperbarui <span style="color: #3F51B5">{{$material->instance->updated_at_string}}</span>
+            <br>
+            dari Kelas {{$course->instance->name}}, Topik {{$topic->instance->name}}
+            <br>
+            <span style="font-style:italic">Materi ini bersifat
+                @if ($material->instance->isPublic())
+                    umum
+                @else
+                    tidak umum
+                @endif
+            </span>
+            <div class="heading-elements">
+                <a href="{{route('lecturer.material.edit', [$course->instance->id, $topic->instance->id, $material->instance->id])}}">
+                    <button class="btn bg-primary">Edit Materi</button>
+                </a>
+            </div>
         </div>
+        <hr>
+        @include('Ods\Elearning\Core::materials.partials.'.$material->type->view)
     </div>
-    <hr>
-    @include('Ods\Elearning\Core::materials.partials.'.$material->type->view)
+</div>
+<div class="col-lg-3">
+    @include('Ods\Elearning\Lecturer::discussion.discussion')
 </div>
 <div id="modal_comment" class="modal fade" tabindex="-1">
     <div class="modal-dialog">

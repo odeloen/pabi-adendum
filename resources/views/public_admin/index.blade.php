@@ -9,6 +9,7 @@
 	<meta name="keywords" content="PABI, PABI-Membership, IDI, Dokter, Dokter Bedah, Medical, Health, Healthcare, Doctor, Clinic, Care, Hospital"> 
 	@include('public_admin.include.style')
 	@include('public_admin.include.function')
+	@yield('addCSS')
 </head>
 
 <body class="navbar-top "> <!-- sidebar-xs -->
@@ -59,6 +60,7 @@
 
 	<!-- Footer -->
 	@include('public_admin.include.footer')
+	@yield('addJS')
 	<!-- /footer -->
 	<script type="text/javascript">
 		

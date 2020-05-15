@@ -1,6 +1,51 @@
 @extends('Ods\Core::template.master')
 
+@section('addcss')
+<style>
+/* Modal Content (image) */
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
 
+@-webkit-keyframes zoom {
+  from {-webkit-transform:scale(0)} 
+  to {-webkit-transform:scale(1)}
+}
+
+@keyframes zoom {
+  from {transform:scale(0)} 
+  to {transform:scale(1)}
+}
+
+/* The Close Button */
+.close_image {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close_image:hover,
+.close_image:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+  .modal-content {
+    width: 100%;
+  }
+}
+</style>
+@endsection
 @section('content')
 <div class="col-sm-12">
     <div class="panel panel-primary">
@@ -65,7 +110,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <h6>Isi Announcement</h6>
-                                <textarea rows="10" class="form-control" style="resize: vertical"></textarea>
+                                <textarea rows="5" class="form-control" style="resize: vertical"></textarea>
                             </div>
                         </div>
                     </div>
@@ -79,7 +124,7 @@
                                         <center><input type="file" class="file-styled" accept="image/*" id="imgInp" style=" max-height:250px;width:auto;" autocomplete="off"></center>
                                         <img id="upload" src="" alt="" style="width:100%; margin-top:10px;"/>
                                     </div>
-                                    <img id="result" width="100%" style="margin-top:1%;"/>
+                                    <img id="result" height="300"style="margin-top:1%;display: block;margin-left: auto; margin-right: auto;"/>
                                 </div>
                             </div>
                         </div>
@@ -117,7 +162,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <h6>Isi Announcement</h6>
-                                <textarea rows="10" class="form-control" style="resize: vertical"></textarea>
+                                <textarea rows="5" class="form-control" style="resize: vertical"></textarea>
                             </div>
                         </div>
                     </div>
@@ -128,10 +173,10 @@
                                 <input id="announcement_photo" type="hidden">
                                 <div class="form-group" style="margin-left:1%; margin-right:1%">
                                     <div>
-                                        <center><input type="file" class="file-styled" accept="image/*" id="imgInp" style=" max-height:250px;width:auto;" autocomplete="off"></center>
+                                        <center><input type="file" class="file-styled" accept="image/*" id="imgInpUbah" style=" max-height:250px;width:auto;" autocomplete="off"></center>
                                         <img id="upload" src="" alt="" style="width:100%; margin-top:10px;"/>
                                     </div>
-                                    <img id="result" width="100%" style="margin-top:1%;"/>
+                                    <img id="resultUbah" height="300"style="margin-top:1%;display: block;margin-left: auto; margin-right: auto;"/>
                                 </div>
                             </div>
                         </div>
@@ -145,6 +190,30 @@
             </form>
         </div>
     </div>
+</div>
+<div id="modal_detail" class="modal fade" tabindex="-1" style="overflow-y: auto;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title">Detail Announcement</h5>
+            </div>
+
+            <div class="modal-body">
+                <h6 class="text-semibold">Judul</h6>
+                <img class="myImg" src="{{asset('portrait.jpg')}}" alt="Snow" style="width:100%;max-width:250px;display: block;margin-left: auto; margin-right: auto; margin-bottom:10px">
+				<p>Konten</p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal_image" class="modal" style="overflow-y: auto; background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.9);">
+    <span class="close_image">&times;</span>
+    <img class="modal-content" id="img01">
 </div>
 @endsection
 @section('addjs')
@@ -186,7 +255,7 @@
             { "orderable": false, "targets": [2,3] },
         ]
     });
-
+    
     document.addEventListener('DOMContentLoaded', function() {
 
         // Default file input style
@@ -238,6 +307,55 @@
     $("#imgInp").change(function(){
         readURL(this);
     });
+
+    function readURLUbah(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#resultUbah').attr('src', e.target.result);
+                document.getElementById("upload").style.display = "none";
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    
+    $("#imgInpUbah").change(function(){
+        readURLUbah(this);
+    });
     //END
+
+    //code for image zoom
+    var modal = document.getElementById("modal_image");
+    var img = document.getElementsByClassName("myImg");
+    var modalImg = document.getElementById("img01");
+    for(var i=0;i<img.length;i++){
+        img[i].onclick = function(){
+            modal.style.display = "block";
+            modalImg.src = this.src;
+        }
+    }
+    
+    //close using x button
+    var span = document.getElementsByClassName("close_image")[0];
+    span.onclick = function() { 
+        modal.style.display = "none";
+    }
+
+    //close when click outside picture
+    $("#modal_image").click(function(ev){
+        if(ev.target != this) return;
+        modal.style.display = "none";
+    });
+
+    //close when esc key down
+    $(document).keydown(function(event) { 
+        if (event.keyCode == 27) { 
+            modal.style.display = "none";
+        }
+    });
+    //end code
 </script>
 @endsection

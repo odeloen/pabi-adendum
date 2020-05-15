@@ -1,4 +1,9 @@
 @extends('public_admin.index')
+
+@section('addCSS')
+@include('Ods\Announcement::member.dashboard.css')
+@endsection
+
 @section('tempat_content')
 @include('public_admin.include.function') 
 
@@ -76,6 +81,7 @@ if(!empty($min_poin)){
             </div>
         </div>
     </div> 
+    
     <div class="row"> 
         <div class="col-sm-6 col-md-3 panelhamdi">
             <div style="height: 200px !important;" class="panel panel-body bg-indigo-400 has-bg-image">
@@ -232,7 +238,8 @@ if(!empty($min_poin)){
                 </a>
             </div>
         </div> 
-    </div> 
+    </div>  
+    @include('Ods\Announcement::member.dashboard.dashboard')
     <?php
     if(!empty($pabi_event_menunggu_bayar)){
     ?>
@@ -311,7 +318,7 @@ if(!empty($min_poin)){
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </div> 
 <script type="text/javascript">
 
@@ -329,4 +336,8 @@ $( document ).ready(function() {
 </script>
 <!-- /main charts -->
 
+@endsection
+
+@section('addJS')
+@include('Ods\Announcement::member.dashboard.js')
 @endsection

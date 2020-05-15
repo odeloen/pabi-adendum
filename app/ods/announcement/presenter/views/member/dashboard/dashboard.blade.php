@@ -1,65 +1,6 @@
-@extends('Ods\Core::template.master')
-
-@section('addcss')
-<style>]
-
-.blog-horizontal:hover{
-  margin-top: -7px;
- -moz-box-shadow:    0 0 20px #b4abab;
- -webkit-box-shadow: 0 0 20px #b4abab;
- box-shadow:         0 0 20px #b4abab;
-}
-
-/* Modal Content (image) */
-.modal-content {
-  margin: auto;
-  display: block;
-  width: 80%;
-  max-width: 700px;
-}
-
-@-webkit-keyframes zoom {
-  from {-webkit-transform:scale(0)} 
-  to {-webkit-transform:scale(1)}
-}
-
-@keyframes zoom {
-  from {transform:scale(0)} 
-  to {transform:scale(1)}
-}
-
-/* The Close Button */
-.close_image {
-  position: absolute;
-  top: 15px;
-  right: 35px;
-  color: #f1f1f1;
-  font-size: 40px;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-.close_image:hover,
-.close_image:focus {
-  color: #bbb;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-/* 100% Image Width on Smaller Screens */
-@media only screen and (max-width: 700px){
-  .modal-content {
-    width: 100%;
-  }
-}
-
-
-</style>
-@endsection
-@section('content')
-<div class="panel panel-primary">
-    <div class="panel-heading " style="background: #00838F;">
-        <h6 class="panel-title">Announcement</h6>
+<div class="panel panel-info">
+    <div class="panel-heading" style="background: #00838F;">
+        <h6 class="panel-title">Announcement Terbaru</h6>
     </div>
     <div class="panel-body">
         <div class="col-lg-6">
@@ -107,6 +48,11 @@
             </a>
         </div>
         
+        <div class="col-lg-12" style="margin-bottom: 10px;">
+            <div class="text-right mt-5">
+                <button class="btn bg-info-600">Lihat Announcement Lainnya</button>
+            </div>
+        </div>
     </div>
 </div>
 <div id="modal_detail" class="modal fade" tabindex="-1" style="overflow-y: auto;">
@@ -133,39 +79,3 @@
     <span class="close_image">&times;</span>
     <img class="modal-content" id="img01">
 </div>
-@endsection
-
-@section('addjs')
-<script type="text/javascript">
-//code for image zoom
-var modal = document.getElementById("modal_image");
-    var img = document.getElementsByClassName("myImg");
-    var modalImg = document.getElementById("img01");
-    for(var i=0;i<img.length;i++){
-        img[i].onclick = function(){
-            modal.style.display = "block";
-            modalImg.src = this.src;
-        }
-    }
-    
-    //close using x button
-    var span = document.getElementsByClassName("close_image")[0];
-    span.onclick = function() { 
-        modal.style.display = "none";
-    }
-
-    //close when click outside picture
-    $("#modal_image").click(function(ev){
-        if(ev.target != this) return;
-        modal.style.display = "none";
-    });
-
-    //close when esc key down
-    $(document).keydown(function(event) { 
-        if (event.keyCode == 27) { 
-            modal.style.display = "none";
-        }
-    });
-    //end code
-</script>
-@endsection
