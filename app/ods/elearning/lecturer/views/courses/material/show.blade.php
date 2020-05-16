@@ -23,7 +23,7 @@
         Kelas ini sedang dalam proses verifikasi admin
     </div>
 @endif
-<div class="col-lg-9">
+<div class="col-lg-12">
     <div class="panel panel-flat border-top-xlg border-top-indigo">
         <div class="panel-heading" style="margin-bottom:-10px">
             <h5 class="panel-title"><span class="text-semibold">{{$material->instance->name}}</h5>
@@ -49,9 +49,6 @@
         <hr>
         @include('Ods\Elearning\Core::materials.partials.'.$material->type->view)
     </div>
-</div>
-<div class="col-lg-3">
-    @include('Ods\Elearning\Lecturer::discussion.discussion')
 </div>
 <div id="modal_comment" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
