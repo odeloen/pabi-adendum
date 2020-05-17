@@ -52,6 +52,7 @@
     <div class="panel panel-flat border-top-xlg border-top-indigo">
         <div class="panel-heading" style="margin-bottom:-10px">
             <h5 class="panel-title"><span class="text-semibold">{{$announcement->title}}</h5>
+            dibuat pada tanggal <span style="color: #3F51B5">{{$announcement->createdAtString}}</span>
         </div>
         <hr>
 
