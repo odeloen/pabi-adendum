@@ -88,6 +88,7 @@ include(app_path('ods/utils/helpers/DoesURLExists.php'));
                         @include('Ods\Core::partials.sidebar-kodig')
 						<!-- /page kits -->
 						@if(in_array(request()->session()->get('pabi_role_id'), [1,2]))
+							<li class="dashboard"><a href="{{route('admin.announcement.list')}}" class="legitRipple"><i class=" icon-newspaper"></i> <span>Announcement</span></a></li>
 							<li>
 								<a href="#"><i class="icon-coins"></i>
 									<span>Iuran</span></a>

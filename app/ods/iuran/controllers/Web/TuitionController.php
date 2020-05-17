@@ -65,7 +65,7 @@ class TuitionController extends Controller
         $response = $useCase->execute();
 
         Alert::fromResponse($response);
-
+        dd($response);
         return view('Ods\Iuran::admin.master', $response->data)->with('tac', $tac);
     }
 

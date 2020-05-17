@@ -35,8 +35,8 @@ class AdminAnnouncementController extends Controller
             }
             $response->data = $res;
         }
-
-        return response()->json([$response], 200);
+        dd($response);
+        return view('Ods\Announcement::admin.list', $response->data);
     }
 
     public function show($announcementID){
@@ -47,8 +47,8 @@ class AdminAnnouncementController extends Controller
             $announcementViewModel = new AnnouncementViewModel($response->data);
             $response->data = $announcementViewModel;
         }
-
-        return response()->json([$response], 200);
+        
+        return view('Ods\Announcement::admin.show', $response->data);
     }
 
     public function create(Request $request){
@@ -58,9 +58,9 @@ class AdminAnnouncementController extends Controller
         ]);
 
         if ($validator->fails()) {
-//            Alert::error("Error", "Isian kurang lengkap");
-//            return back()->withErrors($validator)->withInput();
-            return response()->json(['errors' => $validator->errors()], 409);
+            Alert::error("Error", "Isian kurang lengkap");
+            return back()->withErrors($validator)->withInput();
+            //return response()->json(['errors' => $validator->errors()], 409);
         }
 
         $title = $request->title;
@@ -73,9 +73,9 @@ class AdminAnnouncementController extends Controller
             ]);
 
             if ($validator->fails()) {
-//                Alert::error("Error", "Format gambar yang diterima : jpeg, png, jpg");
-//                return back()->withErrors($validator)->withInput();
-                return response()->json(['errors' => $validator->errors()], 409);
+                Alert::error("Error", "Format gambar yang diterima : jpeg, png, jpg");
+                return back()->withErrors($validator)->withInput();
+                //return response()->json(['errors' => $validator->errors()], 409);
             }
 
             $image = $request->file('image');
@@ -84,7 +84,9 @@ class AdminAnnouncementController extends Controller
         $usecase = new CreateAnnouncementUsecase($this->announcementRepository);
         $response = $usecase->execute($title, $description, $image);
 
-        return response()->json([$response], 200);
+        Alert::fromResponse($response);
+
+        return redirect()->route('admin.announcement.list');
     }
 
     public function delete(Request $request){

@@ -69,6 +69,21 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @if(!empty($announcementViewModel))
+                            @foreach ($announcementViewModel as $announcement)
+                                <tr>
+                                    <td>{{$announcement->title}}</td>
+                                    <td class="text-center">12 Januari 2020</td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn bg-teal-800" data-toggle="modal" data-target="#modal_detail"><span>Lihat Detail</span></button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn bg-info" data-toggle="modal" data-target="#modal_update" style="width: 90px; margin:2px;"><span>Ubah</span></button>
+                                        <button type="button" class="btn bg-danger"  style="width: 90px;margin:2px;"><span>Hapus</span></button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
                         <tr>
                             <td>Hasil rapat besar pengurus PABI</td>
                             <td class="text-center">12 Januari 2020</td>
@@ -95,14 +110,14 @@
                 <h5 class="modal-title">Buat Announcement</h5>
             </div>
 
-            <form action="#" method="POST" enctype="multipart/form-data">
+            <form action="{{route('admin.announcement.create')}}" method="POST"  enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
                         <div class="row">
                             <div class="col-sm-12">
                                 <h6>Judul Announcement</h6>
-                                <textarea name="description" class="form-control maxlength-textarea" autocomplete="off" maxLength="250" rows="2" style="resize:vertical"></textarea>
+                                <textarea name="title" class="form-control maxlength-textarea" autocomplete="off" maxLength="250" rows="2" style="resize:vertical"></textarea>
                             </div>
                         </div>
                     </div>
@@ -110,7 +125,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <h6>Isi Announcement</h6>
-                                <textarea rows="5" class="form-control" style="resize: vertical"></textarea>
+                                <textarea name= "description" rows="5" class="form-control" style="resize: vertical"></textarea>
                             </div>
                         </div>
                     </div>
@@ -119,12 +134,12 @@
                             <div class="col-sm-12">
                                 <h6>Lampiran Foto untuk Announcement</h6>
                                 <input id="announcement_photo" type="hidden">
-                                <div class="form-group" style="margin-left:1%; margin-right:1%">
+                                <div class="form-group" style="margin-left:auto; margin-right:auto;">
                                     <div>
-                                        <center><input type="file" class="file-styled" accept="image/*" id="imgInp" style=" max-height:250px;width:auto;" autocomplete="off"></center>
+                                        <center><input  name="image" type="file" class="file-styled" accept="image/x-png, image/jpeg" id="imgInp" style=" max-height:250px;width:auto;" autocomplete="off"></center>
                                         <img id="upload" src="" alt="" style="width:100%; margin-top:10px;"/>
                                     </div>
-                                    <img id="result" height="300"style="margin-top:1%;display: block;margin-left: auto; margin-right: auto;"/>
+                                    <img id="result" style="margin-top:1%;display:block;margin-left: auto; margin-right: auto; max-width:250px; height:auto;"/>
                                 </div>
                             </div>
                         </div>
