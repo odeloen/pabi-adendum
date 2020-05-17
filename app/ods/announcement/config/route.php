@@ -17,8 +17,9 @@ Route::namespace('App\Ods\Announcement\Presenter\Controllers\Web')->prefix('memb
     Route::get('show/{announcementID}', 'MemberAnnouncementController@show')->name('announcement.show');
 });
 
-Route::namespace('')->prefix('api')->middleware(['api'])->group(function () {
-
+Route::namespace('App\Ods\Announcement\Presenter\Controllers\Api')->prefix('api')->middleware(['api'])->group(function () {
+    Route::get('list', 'AnnouncementController@list')->name('announcement.list');
+    Route::get('show/{announcementID}', 'AnnouncementController@show')->name('announcement.show');
 });
 
 
