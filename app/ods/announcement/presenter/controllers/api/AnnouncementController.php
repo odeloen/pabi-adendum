@@ -9,9 +9,6 @@ use App\Ods\Announcement\Domain\Application\GetAnnouncementListUsecase;
 use App\Ods\Announcement\Domain\Application\GetNewestAnnouncementListUsecase;
 use App\Ods\Announcement\Infrastructure\Persistence\Eloquent\Repositories\AnnouncementEloquentRepository;
 use App\ods\announcement\presenter\models\AnnouncementViewModel;
-use App\Ods\Core\Entities\Alert;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class AnnouncementController extends Controller
 {
@@ -50,9 +47,9 @@ class AnnouncementController extends Controller
         return response()->json($response);
     }
 
-    public function getNewest($count){
+    public function getNewest(){
         $usecase = new GetNewestAnnouncementListUsecase($this->announcementRepository);
-        $response = $usecase->execute($count);
+        $response = $usecase->execute(3);
 
         if (!empty($response->data)){
             $res = [];

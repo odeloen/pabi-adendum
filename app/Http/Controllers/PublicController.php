@@ -15,8 +15,20 @@ use App\Model\MasterTentangPabi;
 use Alert;
 use Input;
 
+
+use App\Ods\Announcement\Domain\Application\GetNewestAnnouncementListUsecase;
+use App\Ods\Announcement\Infrastructure\Persistence\Eloquent\Repositories\AnnouncementEloquentRepository;
+use App\ods\announcement\presenter\models\AnnouncementViewModel;
+
 class PublicController extends Controller
 {
+    private $announcementRepository;
+
+    public function __construct()
+    {
+        $this->announcementRepository = new AnnouncementEloquentRepository();
+    }
+
     public function public_admin()
     {
         $role_id = session('pabi_role_id');
@@ -75,7 +87,20 @@ class PublicController extends Controller
         session()->put('nama_menu_header', 'Dashboard');
 
         $nama_menu = 'Dashboard';
-        return view('public_admin.menu_dashboard.dashboard_member'
+
+        $usecase = new GetNewestAnnouncementListUsecase($this->announcementRepository);
+        $responseAnnouncement = $usecase->execute(2);
+
+        if (!empty($responseAnnouncement->data)){
+            $res = [];
+            foreach ($responseAnnouncement->data['announcements'] as $announcementDomainModel){
+               $announcementViewModel = new AnnouncementViewModel($announcementDomainModel);
+               $res[] = $announcementViewModel;
+            }
+            $responseAnnouncement->data['announcements'] = $res;
+        }
+        
+        return view('public_admin.menu_dashboard.dashboard_member',$responseAnnouncement->data
                 , compact('nama_menu')); 
     }
 
@@ -176,8 +201,9 @@ class PublicController extends Controller
         // foreach ($data_banner as $data_banner) {}
         // foreach ($data_tentang_pabi as $data_tentang_pabi) {} 
 
+
         return view('public_member.menu_dashboard.dashboard'
-            , compact('data_dashboard', 'data_banner', 'data_tentang_pabi')); 
+            , compact('data_dashboard', 'data_banner', 'data_tentang_pabi, response->data')); 
     }
 
     public function updatePassword(Request $request) {
