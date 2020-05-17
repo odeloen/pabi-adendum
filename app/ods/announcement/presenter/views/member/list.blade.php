@@ -65,7 +65,7 @@
         @if(!empty($announcements))
             @foreach ($announcements as $announcement)
                 <div class="col-lg-6">
-                    <a href="{{route('member.announcement.show', $announcement->id)}}" style="text-decoration:none;color:inherit;">
+                    <a href="{{route('member.announcement.show', $announcement->id)}}" target="_blank" style="text-decoration:none;color:inherit;">
                         <div class="panel panel-flat blog-horizontal blog-horizontal-2" style="cursor:pointer;">
 
                             <div class="panel-body">

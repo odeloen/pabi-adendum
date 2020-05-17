@@ -53,7 +53,7 @@ class AnnouncementEloquentRepository implements IAnnouncementRepository
     }
 
     public function findNewest(int $count){
-        $announcementDataModels = AnnouncementDataModel::orderBy('created_at')->limit($count);
+        $announcementDataModels = AnnouncementDataModel::orderBy('created_at')->limit($count)->get();
 
         if (empty($announcementDataModels)) return null;
 

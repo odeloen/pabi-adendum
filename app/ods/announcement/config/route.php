@@ -19,6 +19,7 @@ Route::namespace('App\Ods\Announcement\Presenter\Controllers\Web')->prefix('memb
 
 Route::namespace('App\Ods\Announcement\Presenter\Controllers\Api')->prefix('api')->middleware(['api'])->group(function () {
     Route::get('list', 'AnnouncementController@list')->name('announcement.list');
+    Route::get('list/newest/{count}', 'AnnouncementController@getNewest')->name('announcement.list.newest');
     Route::get('show/{announcementID}', 'AnnouncementController@show')->name('announcement.show');
 });
 

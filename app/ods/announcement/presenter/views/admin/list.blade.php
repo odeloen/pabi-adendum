@@ -75,7 +75,7 @@
                                     <td>{{$announcement->title}}</td>
                                     <td class="text-center">{{$announcement->createdAtString}}</td>
                                     <td class="text-center">
-                                        <a href="{{route('admin.announcement.show', $announcement->id)}}">
+                                        <a href="{{route('admin.announcement.show', $announcement->id)}}" target="_blank">
                                             <button type="button" class="btn bg-teal-800"><span>Lihat Detail</span></button>
                                         </a>
                                     </td>
@@ -83,7 +83,7 @@
                                         <form action="{{route('admin.announcement.delete')}}" method="post">
                                             @csrf
                                             <input type="hidden" name="announcement_id" value="{{$announcement->id}}">
-                                            <button type="submit" class="btn bg-danger" style="margin-top:15%;"><span>Hapus</span></button>
+                                            <button type="button" class="btn bg-danger" style="margin-top:1%;"><span>Hapus</span></button>
                                         </form>
                                     </td>
                                 </tr>

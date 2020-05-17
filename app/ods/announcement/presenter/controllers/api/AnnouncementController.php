@@ -6,6 +6,7 @@ namespace App\Ods\Announcement\Presenter\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\ods\announcement\domain\application\GetAnnouncementDetailUsecase;
 use App\Ods\Announcement\Domain\Application\GetAnnouncementListUsecase;
+use App\Ods\Announcement\Domain\Application\GetNewestAnnouncementListUsecase;
 use App\Ods\Announcement\Infrastructure\Persistence\Eloquent\Repositories\AnnouncementEloquentRepository;
 use App\ods\announcement\presenter\models\AnnouncementViewModel;
 use App\Ods\Core\Entities\Alert;
@@ -46,6 +47,22 @@ class AnnouncementController extends Controller
             $response->data['announcement'] = $announcementViewModel;
         }
         
+        return response()->json($response);
+    }
+
+    public function getNewest($count){
+        $usecase = new GetNewestAnnouncementListUsecase($this->announcementRepository);
+        $response = $usecase->execute($count);
+
+        if (!empty($response->data)){
+            $res = [];
+            foreach ($response->data['announcements'] as $announcementDomainModel){
+               $announcementViewModel = new AnnouncementViewModel($announcementDomainModel);
+               $res[] = $announcementViewModel;
+            }
+            $response->data['announcements'] = $res;
+        }
+
         return response()->json($response);
     }
 }
