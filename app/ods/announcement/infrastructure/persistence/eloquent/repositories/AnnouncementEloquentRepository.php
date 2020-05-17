@@ -6,6 +6,7 @@ namespace App\Ods\Announcement\Infrastructure\Persistence\Eloquent\Repositories;
 use App\Ods\Announcement\Domain\Entities\Announcement;
 use App\Ods\Announcement\Domain\Repositories\IAnnouncementRepository;
 use App\Ods\Announcement\Infrastructure\Persistence\Eloquent\Models\AnnouncementDataModel;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Ramsey\Uuid\Uuid;
 
@@ -35,12 +36,12 @@ class AnnouncementEloquentRepository implements IAnnouncementRepository
 
         if (empty($announcements)) return null;
 
-        $res = [];
+        $announcementDomainModels = [];
         foreach ($announcements as $announcement){
-            $res[] = $this->mapDataModelToDomainModel($announcement);
+            $announcementDomainModels[] = $this->mapDataModelToDomainModel($announcement);
         }
 
-        return collect($res);
+        return collect($announcementDomainModels);
     }
 
     public function findByID(String $announcementID){
@@ -50,6 +51,20 @@ class AnnouncementEloquentRepository implements IAnnouncementRepository
 
         return $this->mapDataModelToDomainModel($announcement);
     }
+
+    public function findNewest(int $count){
+        $announcementDataModels = AnnouncementDataModel::orderBy('created_at')->limit($count);
+
+        if (empty($announcementDataModels)) return null;
+
+        $announcementDomainModels = [];
+        foreach ($announcementDataModels as $announcementDataModel){
+            $announcementDomainModels[] = $this->mapDataModelToDomainModel($announcementDataModel);
+        }
+
+        return collect($announcementDomainModels);
+    }
+
 
     public function insert(Announcement $announcementDomainModel, $image = null){
         $announcementDataModel = AnnouncementDataModel::create($announcementDomainModel);
@@ -67,7 +82,7 @@ class AnnouncementEloquentRepository implements IAnnouncementRepository
         $announcementDataModel->delete();
     }
 
-    private function insertImage(AnnouncementDataModel $announcement, $image){
+    private function insertImage(AnnouncementDataModel $announcement, UploadedFile $image){
         if ($image == null) throw new \Exception('Image is null');
 
         if (isset($announcement->image_path) && file_exists(storage_path('app/' . $announcement->image_path))) {

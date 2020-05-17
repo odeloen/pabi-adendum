@@ -10,6 +10,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Uuid\Uuid;
 
+/**
+ * Class AnnouncementDataModel
+ * @package App\Ods\Announcement\Infrastructure\Persistence\Eloquent\Models
+ * @mixin \Eloquent
+ */
 class AnnouncementDataModel extends Model
 {
     use SoftDeletes;
