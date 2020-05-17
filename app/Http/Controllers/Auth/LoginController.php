@@ -44,7 +44,7 @@ class LoginController extends Controller
      * @return void
      */
 
-     
+
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
@@ -128,7 +128,7 @@ class LoginController extends Controller
                         ],
                     ]);
 
-                    $res = json_decode((string) $response->getBody()->getContents(), true); 
+                    $res = json_decode((string) $response->getBody()->getContents(), true);
                     $role_name = '';
                     switch ($res['data']['role_id']) {
                         case 1:
@@ -149,7 +149,7 @@ class LoginController extends Controller
                         default:
                         break;
                     }
-        
+
                     session([
                         'pabi_username' => $res['data']['username'],
                         'pabi_user_id' => $res['data']['user_id'],
@@ -159,7 +159,7 @@ class LoginController extends Controller
                         'pabi_role_name' => $role_name,
                         'admin_cabang_id' => $res['data']['admin_cabang_id'],
                         'admin_pusat_id' => $res['data']['admin_pusat_id']
-                    ]);       
+                    ]);
 
                     $response = $this->guzzle('GET', 'member/'.session('pabi_member_id'), []);
                     $response = json_decode($response->getBody()->getContents(), true);
@@ -175,9 +175,9 @@ class LoginController extends Controller
                         , 'pabi_event_menunggu_bayar' => $data_member['event_menunggu_bayar']
                         , 'pabi_event_akan_datang' => $data_member['event_akan_datang']
                         , 'pabi_pusat_nama' => $data_member['admin_pusat_nama']
-                        , 'pabi_cabang_nama' => $data_member['admin_cabang_nama'] 
+                        , 'pabi_cabang_nama' => $data_member['admin_cabang_nama']
                     ]);
-        
+
                     if (session('pabi_role_id') == 4) {
                         return redirect()->route('dashboard_member');
                     } else if (session('pabi_role_id') == 5) {
@@ -187,7 +187,7 @@ class LoginController extends Controller
                         $data_rs = $response['data'];
 
                         session([
-                            'pabi_rs_id' => $data_rs['id'] 
+                            'pabi_rs_id' => $data_rs['id']
                             , 'pabi_image' => $data_rs['img_logo']
                             , 'pabi_image_compress' => $data_rs['img_logo']
                         ]);
@@ -199,15 +199,15 @@ class LoginController extends Controller
                 } catch (ClientException $e) {
                     $errors = json_decode($e->getResponse()->getBody()->getContents(), true);
                     $message = $errors['info'];
-                    
+
                     return redirect()->back()->withErrors($message);
                 }
             }
-        }        
+        }
     }
 
     public function login(Request $request)
-    {   
+    {
         $http = new Client();
 
         try {
@@ -225,7 +225,7 @@ class LoginController extends Controller
                 ],
             ]);
 
-            $res = json_decode((string) $response->getBody()->getContents(), true); 
+            $res = json_decode((string) $response->getBody()->getContents(), true);
             $role_name = '';
             switch ($res['data']['role_id']) {
                 case 1:
@@ -256,7 +256,7 @@ class LoginController extends Controller
                 'pabi_role_name' => $role_name,
                 'admin_cabang_id' => $res['data']['admin_cabang_id'],
                 'admin_pusat_id' => $res['data']['admin_pusat_id']
-            ]);            
+            ]);
 
             $response = $this->guzzle('GET', 'member/'.session('pabi_member_id'), []);
             $response = json_decode($response->getBody()->getContents(), true);
@@ -272,7 +272,7 @@ class LoginController extends Controller
                 , 'pabi_event_menunggu_bayar' => $data_member['event_menunggu_bayar']
                 , 'pabi_event_akan_datang' => $data_member['event_akan_datang']
                 , 'pabi_pusat_nama' => $data_member['admin_pusat_nama']
-                , 'pabi_cabang_nama' => $data_member['admin_cabang_nama'] 
+                , 'pabi_cabang_nama' => $data_member['admin_cabang_nama']
             ]);
 
             if (session('pabi_role_id') == 4) {
@@ -284,7 +284,7 @@ class LoginController extends Controller
                 $data_rs = $response['data'];
 
                 session([
-                    'pabi_rs_id' => $data_rs['id']  
+                    'pabi_rs_id' => $data_rs['id']
                     , 'pabi_image' => $data_rs['img_logo']
                     , 'pabi_image_compress' => $data_rs['img_logo']
                 ]);
@@ -293,13 +293,13 @@ class LoginController extends Controller
             } else {
                 return redirect()->route('dashboard_admin');
             }
-        
+
         } catch (ClientException $e) {
             $errors = json_decode($e->getResponse()->getBody()->getContents(), true);
             $message = $errors['info'];
-            
+
             return redirect()->back()->withErrors($message);
-        }  
+        }
     }
 
     function logout_admin()
