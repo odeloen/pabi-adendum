@@ -29,11 +29,11 @@ class AdminAnnouncementController extends Controller
 
         if (!empty($response->data)){
             $res = [];
-            foreach ($response->data as $announcementDomainModel){
+            foreach ($response->data['announcements'] as $announcementDomainModel){
                $announcementViewModel = new AnnouncementViewModel($announcementDomainModel);
                $res[] = $announcementViewModel;
             }
-            $response->data = $res;
+            $response->data['announcements'] = $res;
         }
         dd($response);
         return view('Ods\Announcement::admin.list', $response->data);
@@ -44,8 +44,8 @@ class AdminAnnouncementController extends Controller
         $response = $usecase->execute($announcementID);
 
         if (!empty($response->data)){
-            $announcementViewModel = new AnnouncementViewModel($response->data);
-            $response->data = $announcementViewModel;
+            $announcementViewModel = new AnnouncementViewModel($response->data['announcement']);
+            $response->data['announcement'] = $announcementViewModel;
         }
         
         return view('Ods\Announcement::admin.show', $response->data);
