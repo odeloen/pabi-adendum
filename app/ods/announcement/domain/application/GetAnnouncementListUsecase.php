@@ -22,6 +22,10 @@ class GetAnnouncementListUsecase
             return UseCaseResponse::createErrorResponse("Gagal mencari pengumuman terkait");
         }
 
-        return UseCaseResponse::createDataResponse($announcements);
+        $data = [
+            'announcements' => $announcements,
+        ];
+
+        return UseCaseResponse::createDataResponse($data);
     }
 }

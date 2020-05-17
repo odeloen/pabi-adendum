@@ -24,6 +24,10 @@ class GetAnnouncementDetailUsecase
 
         if (empty($announcement)) return UseCaseResponse::createErrorResponse("Tidak dapat menemukan pengumuman terkait");
 
-        return UseCaseResponse::createDataResponse($announcement);
+        $data = [
+            'announcement' => $announcement,
+        ];
+
+        return UseCaseResponse::createDataResponse($data);
     }
 }
