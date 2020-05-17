@@ -69,33 +69,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if(!empty($announcementViewModel))
-                            @foreach ($announcementViewModel as $announcement)
+                        @if(!empty($announcements))
+                            @foreach ($announcements as $announcement)
                                 <tr>
                                     <td>{{$announcement->title}}</td>
-                                    <td class="text-center">12 Januari 2020</td>
+                                    <td class="text-center">{{$announcement->createdAtString}}</td>
                                     <td class="text-center">
-                                        <button type="button" class="btn bg-teal-800" data-toggle="modal" data-target="#modal_detail"><span>Lihat Detail</span></button>
+                                        <a href="{{route('admin.announcement.show', $announcement->id)}}">
+                                            <button type="button" class="btn bg-teal-800"><span>Lihat Detail</span></button>
+                                        </a>
                                     </td>
-                                    <td>
-                                        <button type="button" class="btn bg-info" data-toggle="modal" data-target="#modal_update" style="width: 90px; margin:2px;"><span>Ubah</span></button>
-                                        <button type="button" class="btn bg-danger"  style="width: 90px;margin:2px;"><span>Hapus</span></button>
+                                    <td class="text-center">
+                                        <form action="{{route('admin.announcement.delete')}}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="announcement_id" value="{{$announcement->id}}">
+                                            <button type="submit" class="btn bg-danger" style="margin-top:15%;"><span>Hapus</span></button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
                         @endif
-                        <tr>
-                            <td>Hasil rapat besar pengurus PABI</td>
-                            <td class="text-center">12 Januari 2020</td>
-                            <td class="text-center">
-                                <button type="button" class="btn bg-teal-800" data-toggle="modal" data-target="#modal_detail"><span>Lihat Detail</span></button>
-                            </td>
-                            <td>
-                                <button type="button" class="btn bg-info" data-toggle="modal" data-target="#modal_update" style="width: 90px; margin:2px;"><span>Ubah</span></button>
-                                <button type="button" class="btn bg-danger"  style="width: 90px;margin:2px;"><span>Hapus</span></button>
-                            </td>
-                        </tr>
-
                     </tbody>
             </table>
             </div>
@@ -117,7 +110,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <h6>Judul Announcement</h6>
-                                <textarea name="title" class="form-control maxlength-textarea" autocomplete="off" maxLength="250" rows="2" style="resize:vertical"></textarea>
+                                <textarea name="title" class="form-control maxlength-textarea" autocomplete="off" maxLength="50" rows="2" style="resize:vertical"></textarea>
                             </div>
                         </div>
                     </div>
@@ -153,82 +146,6 @@
             </form>
         </div>
     </div>
-</div>
-<div id="modal_update" class="modal fade" tabindex="-1" style="overflow-y: auto;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h5 class="modal-title">Ubah Announcement</h5>
-            </div>
-
-            <form action="#" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h6>Judul Announcement</h6>
-                                <textarea name="description" class="form-control maxlength-textarea" autocomplete="off" maxLength="250" rows="2" style="resize:vertical"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h6>Isi Announcement</h6>
-                                <textarea rows="5" class="form-control" style="resize: vertical"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h6>Lampiran Foto untuk Announcement</h6>
-                                <input id="announcement_photo" type="hidden">
-                                <div class="form-group" style="margin-left:1%; margin-right:1%">
-                                    <div>
-                                        <center><input type="file" class="file-styled" accept="image/*" id="imgInpUbah" style=" max-height:250px;width:auto;" autocomplete="off"></center>
-                                        <img id="upload" src="" alt="" style="width:100%; margin-top:10px;"/>
-                                    </div>
-                                    <img id="resultUbah" height="300"style="margin-top:1%;display: block;margin-left: auto; margin-right: auto;"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-link" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Buat Announcement</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<div id="modal_detail" class="modal fade" tabindex="-1" style="overflow-y: auto;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h5 class="modal-title">Detail Announcement</h5>
-            </div>
-
-            <div class="modal-body">
-                <h6 class="text-semibold">Judul</h6>
-                <img class="myImg" src="{{asset('portrait.jpg')}}" alt="Snow" style="width:100%;max-width:250px;display: block;margin-left: auto; margin-right: auto; margin-bottom:10px">
-				<p>Konten</p>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link" data-dismiss="modal">Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="modal_image" class="modal" style="overflow-y: auto; background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.9);">
-    <span class="close_image">&times;</span>
-    <img class="modal-content" id="img01">
 </div>
 @endsection
 @section('addjs')
@@ -299,7 +216,7 @@
 
     //code for maxlength in textarea
     $('.maxlength-textarea').maxlength({
-        threshold: 250,
+        threshold: 50,
         warningClass: "label label-primary",
         limitReachedClass: "label label-danger"
     });

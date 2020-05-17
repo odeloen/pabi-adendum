@@ -50,7 +50,9 @@
         
         <div class="col-lg-12" style="margin-bottom: 10px;">
             <div class="text-right mt-5">
-                <button class="btn bg-info-600">Lihat Announcement Lainnya</button>
+                <a href="{{route('member.announcement.list')}}">
+                    <button class="btn bg-info-600">Lihat Announcement Lainnya</button>
+                </a>
             </div>
         </div>
     </div>

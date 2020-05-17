@@ -35,7 +35,7 @@ class AdminAnnouncementController extends Controller
             }
             $response->data['announcements'] = $res;
         }
-        dd($response);
+        
         return view('Ods\Announcement::admin.list', $response->data);
     }
 
@@ -47,7 +47,6 @@ class AdminAnnouncementController extends Controller
             $announcementViewModel = new AnnouncementViewModel($response->data['announcement']);
             $response->data['announcement'] = $announcementViewModel;
         }
-        
         return view('Ods\Announcement::admin.show', $response->data);
     }
 
@@ -105,6 +104,8 @@ class AdminAnnouncementController extends Controller
         $usecase = new DeleteAnnouncementUsecase($this->announcementRepository);
         $response = $usecase->execute($announcementID);
 
-        return response()->json([$response], 200);
+        Alert::fromResponse($response);
+
+        return redirect()->route('admin.announcement.list');
     }
 }
