@@ -19,7 +19,7 @@ class BaseEntity
      * @param $createdAt
      * @param $updatedAt
      */
-    public function __construct($id, $deletedAt, $createdAt, $updatedAt)
+    protected function __construct($id, $deletedAt, $createdAt, $updatedAt)
     {
         $this->id = $id;
         $this->deletedAt = $deletedAt;

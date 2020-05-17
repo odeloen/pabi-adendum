@@ -3,7 +3,7 @@
 namespace App\Ods\Utils\Guzzle;
 trait KodigAPITrait {
     function guzzle($method, $url, $form){
-        $base_url =  "http://156.67.219.75/api/";
+        $base_url =  env('URL_API');
 
         try {
             $token = request()->session()->get('pabi_token_api');

@@ -67,7 +67,7 @@ class AnnouncementEloquentRepository implements IAnnouncementRepository
         $announcementDataModel->delete();
     }
 
-    public function insertImage(AnnouncementDataModel $announcement, $image){
+    private function insertImage(AnnouncementDataModel $announcement, $image){
         if ($image == null) throw new \Exception('Image is null');
 
         if (isset($announcement->image_path) && file_exists(storage_path('app/' . $announcement->image_path))) {
@@ -79,7 +79,7 @@ class AnnouncementEloquentRepository implements IAnnouncementRepository
         $announcement->image_path = $filePath;
     }
 
-    public function deleteImage(AnnouncementDataModel $announcement){
+    private function deleteImage(AnnouncementDataModel $announcement){
         if (isset($announcement->image_path) && file_exists(storage_path('app/' . $announcement->image_path))) {
             unlink(storage_path('app/' . $announcement->image_path));
         }
