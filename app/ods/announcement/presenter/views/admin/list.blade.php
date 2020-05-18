@@ -83,7 +83,7 @@
                                         <form action="{{route('admin.announcement.delete')}}" method="post">
                                             @csrf
                                             <input type="hidden" name="announcement_id" value="{{$announcement->id}}">
-                                            <button type="button" class="btn bg-danger" style="margin-top:1%;"><span>Hapus</span></button>
+                                            <button type="submit" class="btn bg-danger" style="margin-top:3%;"><span>Hapus</span></button>
                                         </form>
                                     </td>
                                 </tr>

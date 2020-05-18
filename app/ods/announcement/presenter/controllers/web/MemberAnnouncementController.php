@@ -46,6 +46,6 @@ class MemberAnnouncementController extends Controller
             $response->data['announcement'] = $announcementViewModel;
         }
         
-        return view('Ods\Announcement::admin.show', $response->data);
+        return view('Ods\Announcement::member.show', $response->data);
     }
 }

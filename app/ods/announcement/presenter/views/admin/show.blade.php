@@ -60,7 +60,7 @@
         <div class="panel-body">
             <img src="{{env('APP_URL')}}/sl/images/{{$announcement->imagePath}}" class="img-responsive content-group" style="display: block;margin-left: auto;margin-right: auto;max-height:300px;max-width:300px;">
             <br>
-            {{$announcement->description}}
+            <?php echo nl2br($announcement->description); ?>
         </div>
 
     </div>
@@ -69,7 +69,7 @@
 <div id="modal_image" class="modal" style="overflow-y: auto; background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.9);">
     <span class="close_image">&times;</span>
     <img class="modal-content" id="img01">
-</div>-->
+</div>
 @endsection
 
 @section('addjs')
