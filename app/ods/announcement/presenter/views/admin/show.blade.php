@@ -11,12 +11,12 @@
 }
 
 @-webkit-keyframes zoom {
-  from {-webkit-transform:scale(0)} 
+  from {-webkit-transform:scale(0)}
   to {-webkit-transform:scale(1)}
 }
 
 @keyframes zoom {
-  from {transform:scale(0)} 
+  from {transform:scale(0)}
   to {transform:scale(1)}
 }
 
@@ -56,13 +56,13 @@
         </div>
         <hr>
 
-        
+
         <div class="panel-body">
             <img src="{{env('APP_URL')}}/sl/images/{{$announcement->imagePath}}" class="img-responsive content-group" style="display: block;margin-left: auto;margin-right: auto;max-height:300px;max-width:300px;">
             <br>
             {{$announcement->description}}
         </div>
-        
+
     </div>
 </div>
 
@@ -84,10 +84,10 @@ var modal = document.getElementById("modal_image");
             modalImg.src = this.src;
         }
     }
-    
+
     //close using x button
     var span = document.getElementsByClassName("close_image")[0];
-    span.onclick = function() { 
+    span.onclick = function() {
         modal.style.display = "none";
     }
 
@@ -98,8 +98,8 @@ var modal = document.getElementById("modal_image");
     });
 
     //close when esc key down
-    $(document).keydown(function(event) { 
-        if (event.keyCode == 27) { 
+    $(document).keydown(function(event) {
+        if (event.keyCode == 27) {
             modal.style.display = "none";
         }
     });

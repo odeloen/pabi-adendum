@@ -35,7 +35,7 @@ class AdminAnnouncementController extends Controller
             }
             $response->data['announcements'] = $res;
         }
-        
+
         return view('Ods\Announcement::admin.list', $response->data);
     }
 
@@ -47,6 +47,9 @@ class AdminAnnouncementController extends Controller
             $announcementViewModel = new AnnouncementViewModel($response->data['announcement']);
             $response->data['announcement'] = $announcementViewModel;
         }
+
+//        dd($response);
+
         return view('Ods\Announcement::admin.show', $response->data);
     }
 

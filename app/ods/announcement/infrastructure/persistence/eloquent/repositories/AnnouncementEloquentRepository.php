@@ -12,7 +12,7 @@ use Ramsey\Uuid\Uuid;
 
 class AnnouncementEloquentRepository implements IAnnouncementRepository
 {
-    private $imageDirectory = 'Ods/announcement/images/';
+    private $imageDirectory = 'Ods/announcement/images';
 
     private function mapDataModelToDomainModel(AnnouncementDataModel $announcementDataModel){
         $announcementDomainModel = Announcement::create(
@@ -85,18 +85,22 @@ class AnnouncementEloquentRepository implements IAnnouncementRepository
     private function insertImage(AnnouncementDataModel $announcement, UploadedFile $image){
         if ($image == null) throw new \Exception('Image is null');
 
-        if (isset($announcement->image_path) && file_exists(storage_path('app/' . $announcement->image_path))) {
-            unlink(storage_path('app/'.$announcement->image_path));
+        if (isset($announcement->image_path) && file_exists(storage_path('app/public/' . $announcement->image_path))) {
+            unlink(storage_path('app/public/'.$announcement->image_path));
         }
 
-        $filePath = $image->store('public/'.$this->imageDirectory);
+        $fullFilePath = $image->store('public/'.$this->imageDirectory);
+        $tempArray = explode('/', $fullFilePath);
+
+        $fileName = end($tempArray);
+        $filePath = $this->imageDirectory.'/'.$fileName;
 
         $announcement->image_path = $filePath;
     }
 
     private function deleteImage(AnnouncementDataModel $announcement){
-        if (isset($announcement->image_path) && file_exists(storage_path('app/' . $announcement->image_path))) {
-            unlink(storage_path('app/' . $announcement->image_path));
+        if (isset($announcement->image_path) && file_exists(storage_path('app/public/' . $announcement->image_path))) {
+            unlink(storage_path('app/public/' . $announcement->image_path));
         }
     }
 }
