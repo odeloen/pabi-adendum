@@ -48,8 +48,6 @@ class AdminAnnouncementController extends Controller
             $response->data['announcement'] = $announcementViewModel;
         }
 
-//        dd($response);
-
         return view('Ods\Announcement::admin.show', $response->data);
     }
 

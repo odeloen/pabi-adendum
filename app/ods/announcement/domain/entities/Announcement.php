@@ -27,8 +27,8 @@ class Announcement extends BaseEntity
         $description,
         $imagePath,
         $deletedAt,
-        $createdAt,
-        $updatedAt
+        String $createdAt,
+        String $updatedAt
     ){
         $announcement = new Announcement();
         $announcement->id = $id;

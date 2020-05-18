@@ -8,24 +8,34 @@ class BaseEntity
 {
     protected $id;
 
+    /**
+     * @var String
+     */
     protected $deletedAt;
+    /**
+     * @var String
+     */
     protected $createdAt;
+    /**
+     * @var String
+     */
     protected $updatedAt;
 
     /**
      * BaseEntity constructor.
      * @param $id
-     * @param $deletedAt
-     * @param $createdAt
-     * @param $updatedAt
+     * @param String $deletedAt
+     * @param String $createdAt
+     * @param String $updatedAt
      */
-    protected function __construct($id, $deletedAt, $createdAt, $updatedAt)
+    public function __construct($id, String $deletedAt, String $createdAt, String $updatedAt)
     {
         $this->id = $id;
         $this->deletedAt = $deletedAt;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
     }
+
 
     /**
      * @return mixed

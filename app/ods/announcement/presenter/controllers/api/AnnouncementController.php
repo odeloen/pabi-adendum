@@ -43,7 +43,7 @@ class AnnouncementController extends Controller
             $announcementViewModel = new AnnouncementViewModel($response->data['announcement']);
             $response->data['announcement'] = $announcementViewModel;
         }
-        
+
         return response()->json($response);
     }
 
