@@ -10,10 +10,10 @@ use App\Ods\Elearning\Course\Domain\Entities\Topic;
 interface IMaterialRepository
 {
     /**
-     * @param Topic $topic
+     * @param String $topic
      * @return Material[]
      */
-    public function findByTopic(Topic $topic);
+    public function findByTopicID(String $topicID);
 
     /**
      * @param String $materialID

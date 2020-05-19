@@ -45,8 +45,10 @@ class Course extends BaseEntity
         Lecturer $lecturer,
         String $name,
         String $description,
-        String $imagePath,
-        int $modifier = null
+        ?String $imagePath,
+        String $createdAt,
+        String $updatedAt,
+        ?int $modifier
     ){
         $course = new Course();
         $course->id = $id;
@@ -54,6 +56,9 @@ class Course extends BaseEntity
         $course->name = $name;
         $course->description = $description;
         $course->imagePath = $imagePath;
+        $course->createdAt = $createdAt;
+        $course->updatedAt = $updatedAt;
+
         $course->modifier = $modifier;
 
         return $course;
@@ -86,7 +91,7 @@ class Course extends BaseEntity
     /**
      * @return String
      */
-    public function getName(): String
+    public function getName()
     {
         return $this->name;
     }
@@ -94,7 +99,7 @@ class Course extends BaseEntity
     /**
      * @return String
      */
-    public function getDescription(): String
+    public function getDescription()
     {
         return $this->description;
     }
@@ -102,7 +107,7 @@ class Course extends BaseEntity
     /**
      * @return String
      */
-    public function getImagePath(): String
+    public function getImagePath()
     {
         return $this->imagePath;
     }
@@ -110,7 +115,7 @@ class Course extends BaseEntity
     /**
      * @param String $imagePath
      */
-    public function setImagePath(String $imagePath): void
+    public function setImagePath(String $imagePath)
     {
         $this->imagePath = $imagePath;
     }
@@ -118,7 +123,7 @@ class Course extends BaseEntity
     /**
      * @return Lecturer
      */
-    public function getLecturer(): Lecturer
+    public function getLecturer()
     {
         return $this->lecturer;
     }

@@ -60,7 +60,6 @@ class AdminAnnouncementController extends Controller
         if ($validator->fails()) {
             Alert::error("Error", "Isian kurang lengkap");
             return back()->withErrors($validator)->withInput();
-            //return response()->json(['errors' => $validator->errors()], 409);
         }
 
         $title = $request->title;
@@ -75,7 +74,6 @@ class AdminAnnouncementController extends Controller
             if ($validator->fails()) {
                 Alert::error("Error", "Format gambar yang diterima : jpeg, png, jpg");
                 return back()->withErrors($validator)->withInput();
-                //return response()->json(['errors' => $validator->errors()], 409);
             }
 
             $image = $request->file('image');

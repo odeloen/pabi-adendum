@@ -11,6 +11,7 @@ use App\Ods\Elearning\Course\Domain\Repositories\ILecturerRepository;
 use App\Ods\Elearning\Course\Domain\Repositories\IMaterialRepository;
 use App\Ods\Elearning\Course\Domain\Repositories\ITopicRepository;
 use App\Ods\Elearning\Course\Infrastructure\Persistence\Eloquent\Models\OriginalCourseDataModel;
+use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
 use Ramsey\Uuid\Uuid;
 
@@ -31,7 +32,7 @@ class OriginalCourseRepository implements ICourseRepository
      */
     private $lecturerRepository;
 
-    private $imageDirectory = 'Ods/course/original/images/';
+    private $imageDirectory = 'ods/course/original/images/';
 
     /**
      * OriginalCourseRepository constructor.
@@ -71,6 +72,8 @@ class OriginalCourseRepository implements ICourseRepository
             $courseDataModel->name,
             $courseDataModel->description,
             $courseDataModel->image_path,
+            $courseDataModel->created_at,
+            $courseDataModel->updated_at,
             $courseDataModel->modifier
         );
 
@@ -120,7 +123,9 @@ class OriginalCourseRepository implements ICourseRepository
         $courseDataModel = $this->mapDomainModelToDataModel($courseDomainModel, $courseDataModel);
 
         $courseDataModel->id = Uuid::uuid4()->toString();
-        $this->insertImage($courseDataModel, $image);
+        $courseDataModel->created_at = Carbon::now()->toDateTimeString();
+        $courseDataModel->updated_at = Carbon::now()->toDateTimeString();
+        $courseDataModel = $this->insertImage($courseDataModel, $image);
 
         $courseDataModel->save();
     }
@@ -130,6 +135,7 @@ class OriginalCourseRepository implements ICourseRepository
         $courseDataModel = OriginalCourseDataModel::find($courseDomainModel->getId());
         $courseDataModel = $this->mapDomainModelToDataModel($courseDomainModel, $courseDataModel);
 
+        $courseDataModel->updated_at = Carbon::now()->toDateTimeString();
         $this->insertImage($courseDataModel, $image);
 
         $courseDataModel->save();
@@ -139,26 +145,36 @@ class OriginalCourseRepository implements ICourseRepository
     {
         $courseDataModel = OriginalCourseDataModel::find($courseDomainModel->getId());
 
-        $this->deleteImage($courseDataModel);
+        $courseDataModel = $this->deleteImage($courseDataModel);
 
         $courseDataModel->delete();
     }
 
-    private function insertImage(OriginalCourseDataModel $courseDataModel, UploadedFile $image){
-        if (empty($image)) throw new \Exception('Image is null');
+    private function insertImage(OriginalCourseDataModel $courseDataModel, UploadedFile $image = null){
+        if (empty($image)) return $courseDataModel;
 
         if (isset($courseDataModel->image_path) && file_exists(storage_path('app/' . $courseDataModel->image_path))) {
             unlink(storage_path('app/'.$courseDataModel->image_path));
         }
 
-        $filePath = $image->store('public/'.$this->imageDirectory);
+        $fullFilePath = $image->store('public/'.$this->imageDirectory);
+        $tempArray = explode('/', $fullFilePath);
+
+        $fileName = end($tempArray);
+        $filePath = $this->imageDirectory.$fileName;
 
         $courseDataModel->image_path = $filePath;
+
+        return $courseDataModel;
     }
 
     private function deleteImage(OriginalCourseDataModel $courseDataModel){
         if (isset($courseDataModel->image_path) && file_exists(storage_path('app/' . $courseDataModel->image_path))) {
             unlink(storage_path('app/' . $courseDataModel->image_path));
         }
+
+        $courseDataModel->image_path = null;
+
+        return $courseDataModel;
     }
 }

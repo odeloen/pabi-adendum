@@ -6,18 +6,38 @@ namespace App\Ods\Elearning\Course\Infrastructure\Persistence\Eloquent\Repositor
 
 use App\Ods\Elearning\Course\Domain\Entities\Course;
 use App\Ods\Elearning\Course\Domain\Entities\Topic;
+use App\Ods\Elearning\Course\Domain\Repositories\IMaterialRepository;
 use App\Ods\Elearning\Course\Domain\Repositories\ITopicRepository;
 use App\Ods\Elearning\Course\Infrastructure\Persistence\Eloquent\Models\OriginalTopicDataModel;
+use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 
 class OriginalTopicRepository implements ITopicRepository
 {
+    /**
+     * @var IMaterialRepository
+     */
+    private $materialRepository;
+
+    /**
+     * OriginalTopicRepository constructor.
+     * @param IMaterialRepository $materialRepository
+     */
+    public function __construct(IMaterialRepository $materialRepository)
+    {
+        $this->materialRepository = $materialRepository;
+    }
+
+
     private function mapDataModelToDomainModel(OriginalTopicDataModel $topicDataModel){
+        $materials = $this->materialRepository->findByTopicID($topicDataModel->id);
+
         $topicDomainModel = Topic::createFromExisting(
             $topicDataModel->id,
             $topicDataModel->course_id,
             $topicDataModel->name,
-            $topicDataModel->description
+            $topicDataModel->description,
+            $materials
         );
 
         return $topicDomainModel;
@@ -36,9 +56,9 @@ class OriginalTopicRepository implements ITopicRepository
         return $topicDataModel;
     }
 
-    public function findByCourse(Course $course)
+    public function findByCourseID(String $courseID)
     {
-        $topicDataModels = OriginalTopicDataModel::where('course_id', $course->getId())->get();
+        $topicDataModels = OriginalTopicDataModel::where('course_id', $courseID)->get();
 
         if (!isset($topicDataModels)) return null;
 
@@ -67,6 +87,8 @@ class OriginalTopicRepository implements ITopicRepository
         $topicDataModel = $this->mapDomainModelToDataModel($topicDomainModel, $topicDataModel);
 
         $topicDataModel->id = Uuid::uuid4()->toString();
+        $topicDataModel->created_at = Carbon::now()->toDateTimeString();
+        $topicDataModel->updated_at = Carbon::now()->toDateTimeString();
 
         $topicDataModel->save();
     }
@@ -75,6 +97,7 @@ class OriginalTopicRepository implements ITopicRepository
     {
         $topicDataModel = OriginalTopicDataModel::find($topicDomainModel->getId());
         $topicDataModel = $this->mapDomainModelToDataModel($topicDomainModel, $topicDataModel);
+        $topicDataModel->updated_at = Carbon::now()->toDateTimeString();
 
         $topicDataModel->save();
     }

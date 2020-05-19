@@ -40,20 +40,13 @@ class GetCourseDetailUsecase
 
         if (!isset($course)) return UseCaseResponse::createErrorResponse("Kelas tidak ditemukan");
 
-        $topics = $topicRepository->findByCourse($course);
-
-        if (isset($topics)){
-            foreach($topics as $topic){
-                $materials = $materialRepository->findByTopic($topic);
-                $topic->setMaterials($materials);
-            }
+        try {
+            $topics = $topicRepository->findByCourseID($courseID);
+        } catch (\Exception $exception) {
+            return UseCaseResponse::createErrorResponse("Gagal mencari topik terkait");
         }
 
-        $course->setTopics($topics);
-
-        $data = [
-            'course' => $course
-        ];
+        $data = new GetCourseDetailDTO($course, $topics);
 
         return UseCaseResponse::createDataResponse($data);
     }

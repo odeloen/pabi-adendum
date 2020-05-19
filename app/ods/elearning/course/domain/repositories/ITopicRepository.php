@@ -10,10 +10,10 @@ use App\Ods\Elearning\Course\Domain\Entities\Topic;
 interface ITopicRepository
 {
     /**
-     * @param Course $course
+     * @param String $courseID
      * @return Topic[]
      */
-    public function findByCourse(Course $course);
+    public function findByCourseID(String $courseID);
 
     /**
      * @param String $topicID

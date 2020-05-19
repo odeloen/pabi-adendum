@@ -18,6 +18,8 @@ Route::prefix('quiz')->group(base_path('app/ods/elearning/quiz/presenter/config/
 
 Route::prefix('announcement')->group(base_path('app/ods/announcement/config/route.php'));
 
+Route::prefix('test')->group(base_path('app/ods/elearning/course/config/route.php'));
+
 Route::get('sl/images/{filename}', function($filename){
      $path = storage_path('app\\public\\'.$filename);
      $path = str_replace("\\", "/", $path);

@@ -19,9 +19,9 @@ class OriginalMaterialRepository implements IMaterialRepository
 
     }
 
-    public function findByTopic(Topic $topic)
+    public function findByTopicID(String $topicID)
     {
-        $materialDataModels = OriginalMaterialDataModel::where('topic_id', $topic->getId())->get();
+        $materialDataModels = OriginalMaterialDataModel::where('topic_id', $topicID)->get();
 
         if (!isset($materialDataModels)) return null;
 
