@@ -356,7 +356,7 @@
         </button>
         <a href="">
             <button type="button" class="btn bg-indigo-800 btn-float btn-float-lg" style="width:100%; margin-bottom: 10px;" data-toggle="modal" data-target="#modal_form_horizontal">
-                <i class="icon-graduation2 "></i> <span>Pengaturan Ujian Kelas</span>
+                <i class="icon-graduation2 "></i> <span>Pengaturan Kuis Kelas</span>
             </button>
         </a>
         <a href="{{route('lecturer.submission.list', $course->instance->id)}}">
