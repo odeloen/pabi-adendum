@@ -77,39 +77,6 @@
         Jawaban
     </div>
 </div>
-<div id="modal_setting" class="modal fade" tabindex="-1" style="overflow-y: auto;">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header bg-teal-700">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h5 class="modal-title">Pengaturan Kuis</h5>
-            </div>
-
-            <form action="" method="POST"  enctype="multipart/form-data">
-                @csrf
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Durasi:</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control">
-                            <span class="input-group-addon">menit</span>
-                        </div>    
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Nilai Batas Bawah Kelulusan:</label>
-                        <input type="text" class="form-control" name="verdict" id="inputNumber">
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-link" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 @endsection
 

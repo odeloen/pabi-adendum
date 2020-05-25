@@ -1,10 +1,6 @@
 @extends('Ods\Core::template.master')
 
 
-@section('two_sidebar')
-<div hidden="hidden">{{$two_sidebar="1"}}</div>
-@endsection
-
 
 @section('content')
 <div class="panel panel-body border-top-indigo text-center">
