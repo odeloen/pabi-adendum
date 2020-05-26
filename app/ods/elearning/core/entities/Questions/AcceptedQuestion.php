@@ -6,6 +6,7 @@ namespace App\Ods\Elearning\Core\Entities\Questions;
 
 use App\Ods\Elearning\Core\Entities\Modifiers\ActionModifier;
 use App\Ods\Elearning\Core\Entities\Modifiers\VerificationModifier;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property String $answer_e
  * @property $correct_answer
  */
-class AcceptedQuestion
+class AcceptedQuestion extends Model
 {
     use ActionModifier;
     use VerificationModifier;

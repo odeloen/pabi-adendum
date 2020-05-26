@@ -5,9 +5,12 @@ namespace App\Ods\Elearning\Lecturer\Usecases;
 
 use App\Ods\Core\Requests\UseCaseRequest;
 use App\Ods\Core\Requests\UseCaseResponse;
+use App\Ods\Elearning\Core\Entities\Questions\SubmittedQuestion;
+use App\Ods\Elearning\Core\Entities\Quizzes\OriginalQuiz;
+use App\Ods\Elearning\Core\Entities\Quizzes\SubmittedQuiz;
 use Illuminate\Support\Facades\DB;
 
-class SubmitCourseUseCase 
+class SubmitCourseUseCase
 {
     public function execute($useCaseRequest) : UseCaseResponse
     {
@@ -27,12 +30,11 @@ class SubmitCourseUseCase
         $submittedCourse = $course->makeSubmitCopy();
         $submittedCourse->setSummary($summary);
 
-        DB::beginTransaction();
-
+        DB::connection('odssql')->beginTransaction();
         try {
             $submittedCourseRepository->save($submittedCourse);
         } catch (\Throwable $th) {
-            DB::rollBack();
+            DB::connection('odssql')->rollBack();
             $response = UseCaseResponse::createErrorResponse('Gagal membuat pengajuan (kelas), silahkan coba beberapa saat lagi');
             return $response;
         }
@@ -40,11 +42,11 @@ class SubmitCourseUseCase
         $topics = $topicRepository->findByCourse($course);
         foreach ($topics as $topic) {
             $submittedTopic = $topic->makeSubmitCopy($submittedCourse);
-            // dd($submittedTopic);
+
             try {
                 $submittedTopicRepository->save($submittedTopic);
             } catch (\Throwable $th) {
-                DB::rollBack();
+                DB::connection('odssql')->rollBack();
                 $response = UseCaseResponse::createErrorResponse('Gagal membuat pengajuan (topik), silahkan coba beberapa saat lagi');
                 return $response;
             }
@@ -56,7 +58,7 @@ class SubmitCourseUseCase
                 try {
                     $submittedMaterialRepository->save($submittedMaterial);
                 } catch (\Throwable $th) {
-                    DB::rollBack();
+                    DB::connection('odssql')->rollBack();
                     $response = UseCaseResponse::createErrorResponse('Gagal membuat pengajuan (materi), silahkan coba beberapa saat lagi');
                     return $response;
                 }
@@ -68,12 +70,44 @@ class SubmitCourseUseCase
         try {
             $courseRepository->save($course);
         } catch (\Throwable $th) {
-            DB::rollBack();
+            DB::connection('odssql')->rollBack();
             $response = UseCaseResponse::createErrorResponse('Gagal membuat pengajuan (kelas), silahkan coba beberapa saat lagi');
             return $response;
         }
 
-        DB::commit();
+        $originalQuiz = OriginalQuiz::findByCourseID($courseID);
+
+        if (isset($originalQuiz)) {
+            if (!$originalQuiz->isValidForSubmit()) {
+                DB::connection('odssql')->rollBack();
+                $response = UseCaseResponse::createErrorResponse('Tolong lengkapi informasi kuis');
+                return $response;
+            }
+
+            try {
+                $submittedQuiz = SubmittedQuiz::create(
+                    $originalQuiz,
+                    $submittedCourse->instance->id
+                );
+            } catch (\Exception $e) {
+                DB::connection('odssql')->rollBack();
+                $response = UseCaseResponse::createErrorResponse('Gagal membuat pengajuan (kuis), silahkan coba beberapa saat lagi');
+                return $response;
+            }
+
+
+            try {
+                foreach ($originalQuiz->questions as $originalQuestion) {
+                    $submittedQuestion = SubmittedQuestion::create($originalQuestion, $submittedQuiz->id);
+                }
+            } catch (\Exception $e) {
+                DB::connection('odssql')->rollBack();
+                $response = UseCaseResponse::createErrorResponse('Gagal membuat pengajuan (pertanyaan), silahkan coba beberapa saat lagi');
+                return $response;
+            }
+        }
+
+        DB::connection('odssql')->commit();
         $response = UseCaseResponse::createMessageResponse('Berhasil membuat pengajuan');
 
         return $response;

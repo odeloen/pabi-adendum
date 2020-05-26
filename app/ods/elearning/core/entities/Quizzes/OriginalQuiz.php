@@ -77,6 +77,10 @@ class OriginalQuiz extends Model
         $this->save();
     }
 
+    /**
+     * @param String $courseID
+     * @return \Illuminate\Database\Eloquent\Builder|Model|object|null
+     */
     public static function findByCourseID(String $courseID){
         $quiz = OriginalQuiz::where('original_course_id', $courseID)->first();
 
@@ -152,7 +156,7 @@ class OriginalQuiz extends Model
         if (!isset($this->duration)) $validStatus = false;
         if (strlen($this->correct_answers) != $this->question_count) $validStatus = false;
 
-        foreach ($this->getQuestions() as $question){
+        foreach ($this->questions as $question){
             if (!$question->isValid()) $validStatus = false;
         }
 
