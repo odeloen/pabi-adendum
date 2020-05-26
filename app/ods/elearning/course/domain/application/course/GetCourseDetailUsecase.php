@@ -30,7 +30,6 @@ class GetCourseDetailUsecase
      */
     public function execute(String $courseID){
         $topicRepository = $this->courseRepository->getTopicRepository();
-        $materialRepository = $this->courseRepository->getMaterialRepository();
 
         try {
             $course = $this->courseRepository->findByID($courseID);
@@ -40,8 +39,10 @@ class GetCourseDetailUsecase
 
         if (!isset($course)) return UseCaseResponse::createErrorResponse("Kelas tidak ditemukan");
 
+        $topics = $topicRepository->findByCourseID($courseID);
+
         try {
-            $topics = $topicRepository->findByCourseID($courseID);
+
         } catch (\Exception $exception) {
             return UseCaseResponse::createErrorResponse("Gagal mencari topik terkait");
         }

@@ -27,4 +27,8 @@ class OriginalTopicDataModel extends Model
             'id'
         );
     }
+
+    public function materials(){
+        return $this->hasMany(OriginalMaterialDataModel::class);
+    }
 }

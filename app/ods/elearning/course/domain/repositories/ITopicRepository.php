@@ -21,6 +21,11 @@ interface ITopicRepository
      */
     public function findByID(String $topicID);
 
+    /**
+     * @return IMaterialRepository
+     */
+    public function getMaterialRepository();
+
     public function insert(Topic $topic);
     public function update(Topic $topic);
     public function delete(Topic $topic);

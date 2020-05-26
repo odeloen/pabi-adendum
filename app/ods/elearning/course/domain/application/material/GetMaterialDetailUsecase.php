@@ -5,44 +5,66 @@ namespace App\Ods\Elearning\Course\Domain\Application\Material;
 
 
 use App\Ods\Core\Requests\UseCaseResponse;
+use App\Ods\Elearning\Course\Domain\Repositories\ICourseRepository;
 use App\Ods\Elearning\Course\Domain\Repositories\IMaterialRepository;
+use App\Ods\Elearning\Course\Domain\Repositories\ITopicRepository;
 
 class GetMaterialDetailUsecase
 {
-    /**
-     * @var IMaterialRepository $materialRepository
-     */
+    /** @var ICourseRepository $courseRepository */
+    private $courseRepository;
+
+    /** @var ITopicRepository $topicRepository */
+    private $topicRepository;
+
+    /** @var IMaterialRepository $materialRepository */
     private $materialRepository;
 
     /**
      * GetMaterialDetailUsecase constructor.
-     * @param IMaterialRepository $materialRepository
+     * @param ICourseRepository $courseRepository
      */
-    public function __construct(IMaterialRepository $materialRepository)
+    public function __construct(ICourseRepository $courseRepository)
     {
-        $this->materialRepository = $materialRepository;
+        $this->courseRepository = $courseRepository;
+        $this->topicRepository = $courseRepository->getTopicRepository();
+        $this->materialRepository = $courseRepository->getMaterialRepository();
     }
 
     /**
-     * Get material detail with course name, topic name, and lecturer name
-     * @param String $materialID
+     * @param String $courseID
+     * @param String $topicID
+     * @param String|null $materialID
      * @return UseCaseResponse
      */
-    public function execute(String $materialID){
+    public function execute(String $courseID, String $topicID, ?String $materialID = null){
         try {
-            $material = $this->materialRepository->findByID($materialID);
+            $course = $this->courseRepository->findByID($courseID);
         } catch (\Exception $exception){
-            return UseCaseResponse::createErrorResponse("Gagal mencari materi");
+            return UseCaseResponse::createErrorResponse("Gagal mencari kelas");
         }
 
-        if (!isset($material)) return UseCaseResponse::createErrorResponse("Materi tidak ditemukan");
+        try {
+            $topic = $this->topicRepository->findByID($topicID);
+        } catch (\Exception $exception){
+            return UseCaseResponse::createErrorResponse("Gagal mencari topik");
+        }
 
-        // todo : implementing find course name, topic name, and lecturer name by material id
+        $material = null;
+        if (isset($materialID)){
+            try {
+                $material = $this->materialRepository->findByID($materialID);
+            } catch (\Exception $exception){
+                return UseCaseResponse::createErrorResponse("Gagal mencari materi");
+            }
 
-        $data = [
-            'material' => $material
-        ];
+            if (!isset($material)) {
+                return UseCaseResponse::createErrorResponse("Materi tidak ditemukan");
+            }
+        }
 
-        return UseCaseResponse::createDataResponse($data);
+        $materialDetailDTO = new GetMaterialDetailDTO($course, $topic, $material);
+
+        return UseCaseResponse::createDataResponse($materialDetailDTO);
     }
 }

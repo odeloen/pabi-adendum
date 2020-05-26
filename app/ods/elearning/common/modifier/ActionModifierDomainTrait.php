@@ -19,22 +19,22 @@ Trait ActionModifierDomainTrait
     }
 
     public function isModified(){
-        if (empty($this->modifier)) return false;
-        return $this->modifier != null;
+        if (!isset($this->modifier)) return false;
+        return $this->modifier !== null;
     }
 
     public function isCreated(){
-        if (empty($this->modifier)) return false;
+        if (!isset($this->modifier)) return false;
         return $this->modifier == ActionModifier::Created;
     }
 
     public function isUpdated(){
-        if (empty($this->modifier)) return false;
+        if (!isset($this->modifier)) return false;
         return $this->modifier == ActionModifier::Updated;
     }
 
     public function isDeleted(){
-        if (empty($this->modifier)) return false;
+        if (!isset($this->modifier)) return false;
         return $this->modifier == ActionModifier::Deleted;
     }
 

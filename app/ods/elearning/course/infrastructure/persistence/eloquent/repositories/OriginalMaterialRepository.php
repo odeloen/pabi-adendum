@@ -4,19 +4,65 @@
 namespace App\Ods\Elearning\Course\Infrastructure\Persistence\Eloquent\Repositories;
 
 
+use App\Ods\Elearning\Course\Constant\MaterialType;
 use App\Ods\Elearning\Course\Domain\Entities\Material;
 use App\Ods\Elearning\Course\Domain\Entities\Topic;
 use App\Ods\Elearning\Course\Domain\Repositories\IMaterialRepository;
 use App\Ods\Elearning\Course\Infrastructure\Persistence\Eloquent\Models\OriginalMaterialDataModel;
+use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
 
 class OriginalMaterialRepository implements IMaterialRepository
 {
     private function mapDataModelToDomainModel(OriginalMaterialDataModel $materialDataModel){
+        if ($materialDataModel->type == MaterialType::Post){
+            $content['post_content'] = $materialDataModel->post_content;
+        } else if ($materialDataModel->type == MaterialType::File) {
+            $content['file_path'] = $materialDataModel->file_path;
+            $content['file_name'] = $materialDataModel->file_name;
+        } else if ($materialDataModel->type == MaterialType::Video) {
+            $content['video_content'] = $materialDataModel->video_path;
+        }
 
+        $materialDomainModel = Material::createFromExisting(
+            $materialDataModel->id,
+            $materialDataModel->topic_id,
+            $materialDataModel->name,
+            $materialDataModel->description,
+            $materialDataModel->type,
+            $content,
+            $materialDataModel->public,
+            $materialDataModel->modifier,
+            $materialDataModel->deleted_at,
+            $materialDataModel->created_at,
+            $materialDataModel->updated_at
+        );
+
+        return $materialDomainModel;
     }
 
     private function mapDomainModelToDataModel(Material $materialDomainModel, OriginalMaterialDataModel $materialDataModel){
+        $materialDataModel->id = $materialDomainModel->getId();
+        $materialDataModel->topic_id = $materialDomainModel->getTopicID();
+        $materialDataModel->name = $materialDomainModel->getName();
+        $materialDataModel->description = $materialDomainModel->getDescription();
+        $materialDataModel->type = $materialDomainModel->getType();
+        $materialDataModel->modifier = $materialDomainModel->getModifier();
+        $materialDataModel->public = $materialDomainModel->getPublic();
+        $materialDataModel->deleted_at = $materialDomainModel->getDeletedAt();
+        $materialDataModel->created_at = $materialDomainModel->getCreatedAt();
+        $materialDataModel->updated_at = $materialDomainModel->getUpdatedAt();
 
+        if ($materialDomainModel->getType() === MaterialType::Post){
+            $materialDataModel->post_content = $materialDomainModel->getContent()['post_content'];
+        } else if ($materialDomainModel->getType() === MaterialType::File) {
+            $materialDataModel->file_name = $materialDomainModel->getContent()['file_name'];
+            $materialDataModel->file_path = $materialDomainModel->getContent()['file_path'];
+        } else if ($materialDomainModel->getType() === MaterialType::Video) {
+            $materialDataModel->video_path = $materialDomainModel->getContent()['video_content'];
+        }
+
+        return $materialDataModel;
     }
 
     public function findByTopicID(String $topicID)
@@ -42,18 +88,39 @@ class OriginalMaterialRepository implements IMaterialRepository
         return $this->mapDataModelToDomainModel($materialDataModel);
     }
 
-    public function insert(Material $material)
+    public function insert(Material $materialDomainModel)
     {
-        // TODO: Implement insert() method.
+        $materialDataModel = new OriginalMaterialDataModel();
+        $materialDataModel = $this->mapDomainModelToDataModel($materialDomainModel, $materialDataModel);
+
+        $materialDataModel->id = Uuid::uuid4()->toString();
+        $materialDataModel->created_at = Carbon::now()->toDateTimeString();
+        $materialDataModel->updated_at = Carbon::now()->toDateTimeString();
+
+        $materialDataModel->save();
     }
 
-    public function update(Material $material)
+    public function update(Material $materialDomainModel)
     {
-        // TODO: Implement update() method.
+        $materialDataModel = OriginalMaterialDataModel::find($materialDomainModel->getId());
+        $materialDataModel = $this->mapDomainModelToDataModel($materialDomainModel, $materialDataModel);
+        $materialDataModel->updated_at = Carbon::now()->toDateTimeString();
+
+        $materialDataModel->save();
     }
 
-    public function delete(Material $material)
+    public function delete(Material $materialDomainModel)
     {
-        // TODO: Implement delete() method.
+        $materialDataModel = OriginalMaterialDataModel::find($materialDomainModel->getId());
+
+        $materialDataModel->delete();
+    }
+
+    private function insertFile(){
+        // todo : implement insert file
+    }
+
+    private function deleteFile(){
+        // todo : implement delete file
     }
 }

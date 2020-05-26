@@ -7,7 +7,6 @@ namespace App\Ods\Elearning\Course\Domain\Application\Material;
 use App\Ods\Core\Requests\UseCaseResponse;
 use App\Ods\Elearning\Course\Domain\Entities\Material;
 use App\Ods\Elearning\Course\Domain\Repositories\IMaterialRepository;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class CreateMaterialUsecase
 {
@@ -24,7 +23,7 @@ class CreateMaterialUsecase
         $this->materialRepository = $materialRepository;
     }
 
-    public function execute(String $topicID, String $name, String $description, String $type, $content, Boolean $public){
+    public function execute(String $topicID, String $name, String $description = null, String $type, $content, bool $public){
         $material = Material::createNewMaterial(
             $topicID,
             $name,

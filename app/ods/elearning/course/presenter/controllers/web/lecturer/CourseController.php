@@ -6,8 +6,10 @@ namespace App\Ods\Elearning\Course\Presenter\Controllers\Web\Lecturer;
 
 use App\Http\Controllers\Controller;
 use App\Ods\Core\Entities\Alert;
+use App\Ods\Core\Requests\UseCaseResponse;
 use App\Ods\Elearning\Course\Domain\Application\Course\CreateCourseUsecase;
 use App\Ods\Elearning\Course\Domain\Application\Course\DeleteCourseUsecase;
+use App\Ods\Elearning\Course\Domain\Application\Course\GetCourseDetailUsecase;
 use App\Ods\Elearning\Course\Domain\Application\Course\GetCourseListByLecturerUsecase;
 use App\Ods\Elearning\Course\Domain\Application\Course\UpdateCourseUsecase;
 use App\Ods\Elearning\Course\Domain\Repositories\ICourseRepository;
@@ -15,6 +17,7 @@ use App\Ods\Elearning\Course\Infrastructure\Persistence\Api\Kodig\LecturerReposi
 use App\Ods\Elearning\Course\Infrastructure\Persistence\Eloquent\Repositories\OriginalCourseRepository;
 use App\Ods\Elearning\Course\Infrastructure\Persistence\Eloquent\Repositories\OriginalMaterialRepository;
 use App\Ods\Elearning\Course\Infrastructure\Persistence\Eloquent\Repositories\OriginalTopicRepository;
+use App\Ods\Elearning\Course\Presenter\Models\CourseDetailViewModel;
 use App\Ods\Elearning\Course\Presenter\Models\CourseViewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -28,13 +31,12 @@ class CourseController extends Controller
 
     public function __construct()
     {
-        $topicRepository = new OriginalTopicRepository();
         $materialRepository = new OriginalMaterialRepository();
+        $topicRepository = new OriginalTopicRepository($materialRepository);
         $lecturerRepository = new LecturerRepository();
 
         $this->courseRepository = new OriginalCourseRepository(
             $topicRepository,
-            $materialRepository,
             $lecturerRepository
         );
     }
@@ -62,11 +64,20 @@ class CourseController extends Controller
             $response->data['courses'] = collect($res);
         }
 
-        return view('Ods\Elearning::course.list', $response->data);
+        return view('Ods\Elearning\Lecturer::course.list', $response->data);
     }
 
-    public function show(){
-        // todo : implement show method
+    public function show($courseID){
+        $usecase = new GetCourseDetailUsecase($this->courseRepository);
+        $response = $usecase->execute($courseID);
+
+        Alert::fromResponse($response);
+
+        if ($response->hasError()) return back();
+
+        $courseDetailViewModel = new CourseDetailViewModel($response->data);
+
+        return view('Ods\Elearning\Lecturer::course.show')->with('data', $courseDetailViewModel);
     }
 
     public function create(Request $request){
@@ -166,11 +177,11 @@ class CourseController extends Controller
 
         $usecase = new DeleteCourseUsecase($this->courseRepository);
         $response = $usecase->execute(
-            $courseID,
+            $courseID
         );
 
         Alert::fromResponse($response);
 
-        return back();
+        return redirect()->route('elearning.lecturer.course.list');
     }
 }

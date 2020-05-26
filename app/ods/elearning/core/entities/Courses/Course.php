@@ -9,6 +9,11 @@ use App\Ods\Elearning\Core\Entities\Topics\Topic;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Class Course
+ * @package App\Ods\Elearning\Core\Entities\Courses
+ * @mixin \Eloquent
+ */
 class Course extends Model
 {
     use SoftDeletes;

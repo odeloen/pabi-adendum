@@ -5,9 +5,7 @@ namespace App\Ods\Elearning\Course\Domain\Application\Material;
 
 
 use App\Ods\Core\Requests\UseCaseResponse;
-use App\Ods\Elearning\Course\Domain\Entities\Material;
 use App\Ods\Elearning\Course\Domain\Repositories\IMaterialRepository;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class UpdateMaterialUsecase
 {
@@ -25,7 +23,7 @@ class UpdateMaterialUsecase
         $this->materialRepository = $materialRepository;
     }
 
-    public function execute(String $materialID, String $name, String $description, Boolean $public, String $type, $content){
+    public function execute(String $materialID, String $name, String $description = null, bool $public, $content){
         try {
             $material = $this->materialRepository->findByID($materialID);
         } catch (\Exception $exception){
@@ -34,16 +32,15 @@ class UpdateMaterialUsecase
 
         if (!isset($material)) return UseCaseResponse::createErrorResponse("Materi tidak ditemukan");
 
-        $material->setName($name);
-        $material->setDescription($description);
-        $material->setPublic($public);
-        $material->setType($type);
-        $material->setContent($content);
-
-        $material->markUpdated();
+        $material->update(
+            $name,
+            $description,
+            $content,
+            $public
+        );
 
         try {
-            $this->materialRepository->insert($material);
+            $this->materialRepository->update($material);
         } catch (\Exception $exception) {
             return UseCaseResponse::createErrorResponse("Gagal menyimpan materi");
         }

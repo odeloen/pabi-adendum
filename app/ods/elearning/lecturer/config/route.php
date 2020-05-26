@@ -1,5 +1,4 @@
 <?php
-use Illuminate\Support\Facades\Route;
 
 Route::namespace('Web')->middleware(['web', 'login', 'member'])->group(function () {
     Route::get('courses', 'CourseController@list')->name('lecturer.course.list');
@@ -24,6 +23,14 @@ Route::namespace('Web')->middleware(['web', 'login', 'member'])->group(function 
     Route::get('submission/material/{courseID}:{topicID}:{materialID}', 'SubmissionController@showMaterial')->name('lecturer.submission.material.show');
 
     Route::post('courses/submissions/create', 'SubmissionController@create')->name('lecturer.submission.create');
+
+    Route::get('courses/{courseID}/quiz', 'QuizController@show')->name('lecturer.quiz.show');
+
+    Route::post('quiz/update', 'QuizController@update')->name('lecturer.quiz.update');
+
+    Route::get('quiz/question/{courseID}:{quizID}:{questionID}', 'QuestionController@show')->name('lecturer.question.show');
+    Route::post('quiz/question/create', 'QuestionController@create')->name('lecturer.question.create');
+    Route::post('quiz/question/update', 'QuestionController@update')->name('lecturer.question.update');
 });
 
 Route::namespace('API')->prefix('api')->name('api.')->middleware(['api'])->group(function () {

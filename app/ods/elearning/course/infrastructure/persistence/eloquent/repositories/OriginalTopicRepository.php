@@ -28,6 +28,11 @@ class OriginalTopicRepository implements ITopicRepository
         $this->materialRepository = $materialRepository;
     }
 
+    public function getMaterialRepository()
+    {
+        return $this->materialRepository;
+    }
+
 
     private function mapDataModelToDomainModel(OriginalTopicDataModel $topicDataModel){
         $materials = $this->materialRepository->findByTopicID($topicDataModel->id);
@@ -37,7 +42,11 @@ class OriginalTopicRepository implements ITopicRepository
             $topicDataModel->course_id,
             $topicDataModel->name,
             $topicDataModel->description,
-            $materials
+            $materials,
+            $topicDataModel->modifier,
+            $topicDataModel->deleted_at,
+            $topicDataModel->created_at,
+            $topicDataModel->updated_at
         );
 
         return $topicDomainModel;
@@ -58,7 +67,7 @@ class OriginalTopicRepository implements ITopicRepository
 
     public function findByCourseID(String $courseID)
     {
-        $topicDataModels = OriginalTopicDataModel::where('course_id', $courseID)->get();
+        $topicDataModels = OriginalTopicDataModel::where('course_id', $courseID)->orderBy('created_at', 'asc')->get();
 
         if (!isset($topicDataModels)) return null;
 

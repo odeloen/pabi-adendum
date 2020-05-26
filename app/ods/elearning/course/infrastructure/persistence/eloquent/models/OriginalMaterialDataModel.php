@@ -17,7 +17,7 @@ class OriginalMaterialDataModel extends Model
     use SoftDeletes;
 
     protected $connection = 'odssql';
-    protected $table = 'courses';
+    protected $table = 'materials';
 
     public $incrementing = false;
 

@@ -19,4 +19,8 @@ class OriginalCourseDataModel extends Model
     protected $table = 'courses';
 
     public $incrementing = false;
+
+    public function topics(){
+        return $this->hasMany(OriginalTopicDataModel::class);
+    }
 }

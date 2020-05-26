@@ -36,6 +36,11 @@ interface ICourseRepository
      */
     public function findByID(String $courseID);
 
+    /**
+     * @return Course[]
+     */
+    public function all();
+
     public function insert(Course $course, $image = null);
     public function update(Course $course, $image = null);
     public function delete(Course $course);

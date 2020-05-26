@@ -46,7 +46,10 @@ class Topic extends BaseEntity
         String $name,
         String $description,
         array $materials = null,
-        int $modifier = null
+        int $modifier = null,
+        String $deletedAt = null,
+        String $createdAt,
+        String $updatedAt
     ){
         $topic = new Topic();
 
@@ -56,6 +59,9 @@ class Topic extends BaseEntity
         $topic->description = $description;
         $topic->materials = $materials;
         $topic->modifier = $modifier;
+        $topic->deletedAt = $deletedAt;
+        $topic->createdAt = $createdAt;
+        $topic->updatedAt = $updatedAt;
 
         return $topic;
     }

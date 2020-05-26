@@ -62,14 +62,14 @@ span.text-primary-700{
         <div class="row">
         @endif
         <div class="col-lg-6" >
-            <a href="{{route('lecturer.course.show', $course->id)}}" style="text-decoration:none;color:inherit;">
+            <a href="{{route('elearning.lecturer.course.show', $course->id)}}" style="text-decoration:none;color:inherit;">
             <div class="panel panel-flat blog-horizontal blog-horizontal-2">
 
                 <div class="panel-body">
                     <div class="col-lg-12">
                         <div class="thumb">
-                            @if (!empty($course->imagePath != null))
-                                <img src="{{env('APP_URL')}}/sl/images/{{$course->imagePath}}" class="img-responsive img-rounded" alt="" style="max-height:100px; width:auto; width:auto;">
+                            @if (!empty($course->image_path != null))
+                                <img src="{{env('APP_URL')}}/sl/images/{{$course->image_path}}" class="img-responsive img-rounded" alt="" style="max-height:100px; width:auto; width:auto;">
                             @else
                                 <img src="{{asset('template/global_assets/images/placeholders/placeholder.jpg')}}" class="img-responsive img-rounded" alt="" style="max-height:100px; width:auto;">
                             @endif
@@ -82,7 +82,7 @@ span.text-primary-700{
 
                                         <ul class="list-inline list-inline-separate no-margin text-muted">
                                             <li>oleh <span class="text-primary">{{$course->lecturer}}</span></li>
-                                            <li>diperbarui <span style="color: #3F51B5">{{$course->updatedAtString}}</span></li>
+                                            <li>diperbarui <span style="color: #3F51B5">{{$course->updated_at_string}}</span></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -97,7 +97,7 @@ span.text-primary-700{
 
                     <div class="panel-footer panel-footer-condensed">
                         <div class="heading-elements">
-                            <a href="{{route('lecturer.course.show', $course->id)}}" class="heading-text pull-right">Lihat Kelas <i class="icon-arrow-right14 position-right"></i></a>
+                            <a href="{{route('elearning.lecturer.course.show', $course->id)}}" class="heading-text pull-right">Lihat Kelas <i class="icon-arrow-right14 position-right"></i></a>
                         </div>
                     </div>
                 </div>

@@ -41,7 +41,7 @@ class UpdateTopicUsecase
         $topic->update($name, $description);
 
         try {
-            $this->topicRepository->insert($topic);
+            $this->topicRepository->update($topic);
         } catch (\Exception $exception) {
             return UseCaseResponse::createErrorResponse("Gagal menyimpan topik");
         }

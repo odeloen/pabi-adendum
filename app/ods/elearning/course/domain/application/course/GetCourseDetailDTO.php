@@ -13,12 +13,12 @@ class GetCourseDetailDTO
     /**
      * @var Course $course
      */
-    public $course;
+    private $course;
 
     /**
      * @var Topic[] $topics
      */
-    public $topics;
+    private $topics;
 
     /**
      * GetCourseDetailDTO constructor.
@@ -29,8 +29,23 @@ class GetCourseDetailDTO
         Course $course,
         array $topics
     ){
-        $this->lecturer = $course->getLecturer();
         $this->course = $course;
         $this->topics = $topics;
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse(): Course
+    {
+        return $this->course;
+    }
+
+    /**
+     * @return Topic[]
+     */
+    public function getTopics(): array
+    {
+        return $this->topics;
     }
 }

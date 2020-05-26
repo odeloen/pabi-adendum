@@ -8,7 +8,6 @@ use App\Ods\Elearning\Course\Domain\Entities\Course;
 use App\Ods\Elearning\Course\Domain\Entities\Lecturer;
 use App\Ods\Elearning\Course\Domain\Repositories\ICourseRepository;
 use App\Ods\Elearning\Course\Domain\Repositories\ILecturerRepository;
-use App\Ods\Elearning\Course\Domain\Repositories\IMaterialRepository;
 use App\Ods\Elearning\Course\Domain\Repositories\ITopicRepository;
 use App\Ods\Elearning\Course\Infrastructure\Persistence\Eloquent\Models\OriginalCourseDataModel;
 use Carbon\Carbon;
@@ -23,11 +22,6 @@ class OriginalCourseRepository implements ICourseRepository
     private $topicRepository;
 
     /**
-     * @var IMaterialRepository
-     */
-    private $materialRepository;
-
-    /**
      * @var ILecturerRepository
      */
     private $lecturerRepository;
@@ -37,13 +31,11 @@ class OriginalCourseRepository implements ICourseRepository
     /**
      * OriginalCourseRepository constructor.
      * @param ITopicRepository $topicRepository
-     * @param IMaterialRepository $materialRepository
      * @param ILecturerRepository $lecturerRepository
      */
-    public function __construct(ITopicRepository $topicRepository, IMaterialRepository $materialRepository, ILecturerRepository $lecturerRepository)
+    public function __construct(ITopicRepository $topicRepository, ILecturerRepository $lecturerRepository)
     {
         $this->topicRepository = $topicRepository;
-        $this->materialRepository = $materialRepository;
         $this->lecturerRepository = $lecturerRepository;
     }
 
@@ -55,7 +47,7 @@ class OriginalCourseRepository implements ICourseRepository
 
     public function getMaterialRepository()
     {
-        return $this->materialRepository;
+        return $this->topicRepository->getMaterialRepository();
     }
 
     public function getLecturerRepository()
@@ -74,7 +66,8 @@ class OriginalCourseRepository implements ICourseRepository
             $courseDataModel->image_path,
             $courseDataModel->created_at,
             $courseDataModel->updated_at,
-            $courseDataModel->modifier
+            $courseDataModel->modifier,
+            $courseDataModel->lock
         );
 
         return $courseDomainModel;
@@ -92,6 +85,11 @@ class OriginalCourseRepository implements ICourseRepository
         $courseDataModel->updated_at = $courseDomainModel->getUpdatedAt();
 
         return $courseDataModel;
+    }
+
+    public function all()
+    {
+        // Empty implementation
     }
 
     public function findByLecturer(Lecturer $lecturer)

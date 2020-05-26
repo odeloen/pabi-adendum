@@ -15,4 +15,6 @@ class Quiz
      * @var String $name
      */
     private $name;
+
+    // todo : implement quiz
 }

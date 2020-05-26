@@ -17,7 +17,6 @@ use App\Ods\Elearning\Lecturer\Usecases\GetCourseDetailUseCase;
 use App\Ods\Elearning\Lecturer\Usecases\GetMaterialDetailUseCase;
 use App\Ods\Elearning\Lecturer\Usecases\GetSubmittedCourseListUseCase;
 use App\Ods\Elearning\Lecturer\Usecases\SubmitCourseUseCase;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SubmissionController extends Controller

@@ -6,6 +6,7 @@ namespace App\Ods\Announcement\Infrastructure\Persistence\Eloquent\Repositories;
 use App\Ods\Announcement\Domain\Entities\Announcement;
 use App\Ods\Announcement\Domain\Repositories\IAnnouncementRepository;
 use App\Ods\Announcement\Infrastructure\Persistence\Eloquent\Models\AnnouncementDataModel;
+use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Ramsey\Uuid\Uuid;
@@ -15,7 +16,7 @@ class AnnouncementEloquentRepository implements IAnnouncementRepository
     private $imageDirectory = 'Ods/announcement/images';
 
     private function mapDataModelToDomainModel(AnnouncementDataModel $announcementDataModel){
-        $announcementDomainModel = Announcement::create(
+        $announcementDomainModel = Announcement::createFromExisting(
             $announcementDataModel->id,
             $announcementDataModel->title,
             $announcementDataModel->description,
@@ -68,6 +69,7 @@ class AnnouncementEloquentRepository implements IAnnouncementRepository
 
     public function insert(Announcement $announcementDomainModel, $image = null){
         $announcementDataModel = AnnouncementDataModel::create($announcementDomainModel);
+        $announcementDataModel->created_at = Carbon::now();
 
         $this->insertImage($announcementDataModel, $image);
 

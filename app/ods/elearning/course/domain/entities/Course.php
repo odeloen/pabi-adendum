@@ -32,6 +32,11 @@ class Course extends BaseEntity
     private $lecturer;
 
     /**
+     * @var bool $lock
+     */
+    private $lock;
+
+    /**
      * Course constructor.
      */
     public function __construct(){
@@ -48,7 +53,8 @@ class Course extends BaseEntity
         ?String $imagePath,
         String $createdAt,
         String $updatedAt,
-        ?int $modifier
+        ?int $modifier,
+        ?bool $lock
     ){
         $course = new Course();
         $course->id = $id;
@@ -60,6 +66,7 @@ class Course extends BaseEntity
         $course->updatedAt = $updatedAt;
 
         $course->modifier = $modifier;
+        $course->lock = $lock;
 
         return $course;
     }
@@ -126,5 +133,13 @@ class Course extends BaseEntity
     public function getLecturer()
     {
         return $this->lecturer;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getLock()
+    {
+        return $this->lock;
     }
 }

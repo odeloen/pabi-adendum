@@ -6,7 +6,6 @@ namespace App\Ods\Elearning\Course\Domain\Entities;
 
 use App\Ods\Common\Entities\BaseEntity;
 use App\Ods\Elearning\Common\Modifier\ActionModifierDomainTrait;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class Material extends BaseEntity
 {
@@ -33,32 +32,35 @@ class Material extends BaseEntity
     private $type;
 
     /**
-     * @var String $content
+     * Associative array for the content with multiple meta-data
+     * @var array $content
      */
     private $content;
 
     /**
-     * @var Boolean $public
+     * @var bool $public
      */
     private $public;
 
     /**
      * Material constructor.
      */
-    protected function __construct()
+    public function __construct()
     {
     }
-
-
 
     public static function createFromExisting(
         String $id,
         String $topicID,
         String $name,
-        String $description,
+        String $description = null,
         String $type,
-        String $content,
-        Boolean $public
+        array $content,
+        bool $public,
+        int $modifier = null,
+        String $deletedAt = null,
+        String $createdAt,
+        String $updatedAt
     ){
         $material = new Material();
 
@@ -69,6 +71,10 @@ class Material extends BaseEntity
         $material->type = $type;
         $material->content = $content;
         $material->public = $public;
+        $material->modifier = $modifier;
+        $material->deletedAt = $deletedAt;
+        $material->createdAt = $createdAt;
+        $material->updatedAt = $updatedAt;
 
         return $material;
     }
@@ -76,10 +82,10 @@ class Material extends BaseEntity
     public static function createNewMaterial(
         String $topicID,
         String $name,
-        String $description,
+        String $description = null,
         String $type,
-        String $content,
-        Boolean $public
+        array $content,
+        bool $public
     ){
         $material = new Material();
 
@@ -97,9 +103,9 @@ class Material extends BaseEntity
 
     public function update(
         String $name,
-        String $description,
-        String $content,
-        Boolean $public
+        String $description = null,
+        array $content,
+        bool $public
     ){
         $this->name = $name;
         $this->description = $description;
@@ -107,5 +113,53 @@ class Material extends BaseEntity
         $this->public = $public;
 
         $this->markUpdated();
+    }
+
+    /**
+     * @return String
+     */
+    public function getTopicID()
+    {
+        return $this->topicID;
+    }
+
+    /**
+     * @return String
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return String
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return String
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return array
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPublic()
+    {
+        return $this->public;
     }
 }

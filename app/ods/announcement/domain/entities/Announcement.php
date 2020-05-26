@@ -21,7 +21,7 @@ class Announcement extends BaseEntity
     /**
      * Announcement factory method.
      */
-    public static function create(
+    public static function createFromExisting(
         $id,
         $title,
         $description,
@@ -40,6 +40,12 @@ class Announcement extends BaseEntity
         $announcement->updatedAt = $updatedAt;
 
         return $announcement;
+    }
+
+    public static function createNewAnnouncemenet(
+
+    ){
+
     }
 
     /**

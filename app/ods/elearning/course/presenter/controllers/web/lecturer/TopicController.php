@@ -10,8 +10,10 @@ use App\Ods\Elearning\Course\Domain\Application\Topic\CreateTopicUsecase;
 use App\Ods\Elearning\Course\Domain\Application\Topic\DeleteTopicUsecase;
 use App\Ods\Elearning\Course\Domain\Application\Topic\UpdateTopicUsecase;
 use App\Ods\Elearning\Course\Domain\Repositories\ITopicRepository;
+use App\Ods\Elearning\Course\Infrastructure\Persistence\Eloquent\Repositories\OriginalMaterialRepository;
 use App\Ods\Elearning\Course\Infrastructure\Persistence\Eloquent\Repositories\OriginalTopicRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TopicController extends Controller
 {
@@ -22,7 +24,8 @@ class TopicController extends Controller
 
     public function __construct()
     {
-        $this->topicRepository = new OriginalTopicRepository();
+        $materialRepository = new OriginalMaterialRepository();
+        $this->topicRepository = new OriginalTopicRepository($materialRepository);
     }
 
     public function create(Request $request){
