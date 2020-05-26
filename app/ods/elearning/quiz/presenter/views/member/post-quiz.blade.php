@@ -6,7 +6,19 @@
 <div class="panel panel-body border-top-indigo text-center">
     <h5 class="no-margin text-semibold">Hasil Kuis</h5>
     <br>
-    
+    <p class="mb-15">Nilai Akhir</p>
+    <h2>80</h2>
+
+    <h5 class="mt-3 text-success">Selamat Anda Lulus!</h5>
+    <p class="mb-15">Silahkan ajukan kredit poin kelulusan anda, pada menu <b>Borang</b> atau klik tombol di bawah</p>
+    <div class="text-center">
+        <a href="{{ url('/member/master_borang') }}">
+        <button type="button" class="btn bg-success-400 btn-labeled"><b><i class=" icon-chevron-right"></i></b> Menuju Borang</button>
+        </a>
+    </div>
+
+    <h5 class="mt-3 text-danger">Anda gagal lulus ujian.</h5>
+    <p class="mb-15">Silahkan mengerjakan kuis kelas ini lain waktu.</p>
 </div>
 @endsection
 
