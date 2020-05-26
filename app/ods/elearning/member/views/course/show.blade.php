@@ -66,7 +66,7 @@
         
             <a href="">
                 <button type="button" class="btn bg-indigo-800 btn-float btn-float-lg" style="width:100%; margin-bottom: 10px;" data-toggle="modal" data-target="#modal_form_horizontal">
-                    <i class="icon-graduation2 "></i> <span>Ujian Kelas</span>
+                    <i class="icon-graduation2 "></i> <span>IKUT KUIS</span>
                 </button>
             </a>
             <form action="{{route('member.course.unfollow')}}" method="post">
