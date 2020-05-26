@@ -130,7 +130,6 @@
                                 <div class="form-group" style="margin-left:auto; margin-right:auto;">
                                     <div>
                                         <center><input  name="image" type="file" class="file-styled" accept="image/x-png, image/jpeg" id="imgInp" style=" max-height:250px;width:auto;" autocomplete="off"></center>
-                                        <img id="upload" src="" alt="" style="width:100%; margin-top:10px;"/>
                                     </div>
                                     <img id="result" style="margin-top:1%;display:block;margin-left: auto; margin-right: auto; max-width:250px; height:auto;"/>
                                 </div>

@@ -15,9 +15,6 @@ Route::namespace('Web')->middleware(['web'])->group(function () {
     Route::get("lecturer/quiz", function(){
         return view('Ods\Elearning\Quiz::lecturer.quiz');
     });
-    Route::get("lecturer/result", function(){
-        return view('Ods\Elearning\Quiz::lecturer.result');
-    });
     Route::get("admin/quiz", function(){
         return view('Ods\Elearning\Quiz::admin.quiz');
     });

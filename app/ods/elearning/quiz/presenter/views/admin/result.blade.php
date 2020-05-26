@@ -10,65 +10,26 @@
         <div class="panel-body">
             <div class="content-group mt-10">
                 
-                <table class="table datatable-basic datatable-all table-hover table-bordered">
+                <table class="table datatable-all table-hover table-bordered">
                     <thead>
                         <tr>
+                            <th class="text-center">Tanggal Ambil Tes</th>
                             <th class="text-center">No PABI Sejahtera</th>
                             <th class="text-center" >Nama</th>
+                            <th class="text-center">Nama Kelas</th>
                             <th class="text-center">Nilai Tertinggi yang Diraih</th>
-                            <th class="text-center"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="width:20%;">131231</td>
+                            <td style="width: 15%">20 November 2020</td>
+                            <td style="width: 15%">131231</td>
                             <td class="text-center">Twingky Gans</td>
-                            <td class="text-center" style="width:20%;">90</td>
-                            <td class="text-center" style="width:20%">
-                                <button type="button" class="btn bg-indigo-300" data-toggle="modal" data-target="#modal_record"><span>Lihat Rekam Nilai</span></button>
-                            </td>
+                            <td style="width:20%;">Bedah Jantung oleh Twingky</td>
+                            <td class="text-center" style="width: 15%">90</td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="modal_record" class="modal fade" tabindex="-1" style="overflow-y: auto;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-indigo-300">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h5 class="modal-title">Rekam Nilai</h5>
-            </div>
-
-            <div class="modal-body">
-                <div class="form-group row">
-                    <div class="col-lg-3"><label class="text-semibold">Nama:</label></div>
-                    <div class="col-lg-9"><span>Victoria Anna Davidson</span></div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-lg-3"><label class="text-semibold">No PABI:</label></div>
-                    <div class="col-lg-9"><span>1231231231</span></div>
-                </div>
-                <table class="table datatable-basic datatable-one table-hover table-bordered">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Tanggal Pengerjaan</th>
-                            <th class="text-center" >Nilai</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td >12 desember 2011</td>
-                            <td class="text-center">100</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link" data-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
@@ -86,7 +47,11 @@
     // START SCRIPT TABEL
     $.extend( $.fn.dataTable.defaults, {
         autoWidth: false,
-    dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+        columnDefs: [{
+            orderable: true,
+            width: '100px'
+        }],
+        dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
         language: {
             search: '<span>Cari:</span>',
             lengthMenu: '<span>Menampilkan :</span> _MENU_',
@@ -95,6 +60,12 @@
             info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
             infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
             zeroRecords:"Tidak ditemukan data yang sesuai",
+        },
+        drawCallback: function () {
+            $(this).find('tbody tr').slice(-3).find('.dropdown, .btn-group').addClass('dropup');
+        },
+        preDrawCallback: function() {
+            $(this).find('tbody tr').slice(-3).find('.dropdown, .btn-group').removeClass('dropup');
         }
     });
     $('.datatable-all').DataTable({
@@ -112,31 +83,18 @@
             buttons: [
                 {
                     extend: 'excel',
-                    exportOptions : {
-                        columns: [ 0,1,2 ]
-                    },
                     title: 'PABI Nilai Kuis',
                 },
                 {
                     extend: 'pdf',
-                    exportOptions : {
-                        columns: [ 0,1,2 ]
-                    },
                     title: 'PABI Nilai Kuis',
                 },
                 {
                     extend: 'print',
-                    exportOptions : {
-                        columns: [ 0,1,2 ]
-                    },
                     title: 'PABI Nilai Kuis',
                 }
             ]
         }
-    });
-    
-    $('.datatable-one').DataTable({
-        "searching": false,
     });
 
 </script>
