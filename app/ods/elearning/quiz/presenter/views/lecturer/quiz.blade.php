@@ -10,9 +10,13 @@
 <div class="alert alpha-indigo border-indigo alert-styled-left">
     Ujian Kelas <b>Nama Kelas</b>
 </div>
-<div class="panel panel-flat border-left-xlg border-left-indigo">
+<div class="text-right mt-5 mb-10">
+    <button class="btn bg-grey-300">Hapus Pertanyaan dan Jawaban</button>
+</div>
+<div class="panel panel-flat border-left-xlg border-left-indigo mt-8">
     <div class="panel-heading">
         <span class="label label-default" style="font-size: 22pt;margin-bottom:5px;">78</span>
+        
         <br>
         <h4 class="panel-title"><span class="text-semibold">Pertanyaan:</h4>
     </div>
