@@ -44,13 +44,12 @@ class QuestionController extends Controller
     }
 
     public function update(Request $request){
-//        dd($request);
-
         $validator = Validator::make($request->all(), [
             'quiz_id' => 'required',
             'question_id' => 'required',
             'description' => 'required',
             'answers' => 'required',
+            'correct_answer' => 'required'
         ]);
 
         if ($validator->fails()){
@@ -82,7 +81,9 @@ class QuestionController extends Controller
     }
 
     public function delete(Request $request){
+//        dd($request);
         $validator = Validator::make($request->all(), [
+            'course_id' => 'required',
             'quiz_id' => 'required',
             'question_id' => 'required'
         ]);
@@ -92,15 +93,17 @@ class QuestionController extends Controller
             return back()->withErrors($validator)->withInput($request->all());
         }
 
+        $courseID = $request->course_id;
         $quizID = $request->quiz_id;
         $questionID = $request->question_id;
 
         $quiz = OriginalQuiz::find($quizID);
 
         $quiz->removeQuestion($questionID);
+        $question = $quiz->questions[0];
 
         Alert::success("Success", "Berhasil menghapus pertanyaan");
 
-        return back();
+        return redirect()->route('lecturer.question.show', [$courseID, $quizID, $question->id]);
     }
 }

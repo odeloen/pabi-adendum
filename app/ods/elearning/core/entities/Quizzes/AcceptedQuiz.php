@@ -31,20 +31,9 @@ class AcceptedQuiz extends Model
     use VerificationModifier;
 
     protected $connection = 'odssql';
-    protected $table = 'original_quizzes';
+    protected $table = 'accepted_quizzes';
     protected $primaryKey = 'id';
     public $incrementing = false;
-
-    /**
-     * @var int $numberOfQuestion
-     * not persisted
-     */
-    public $numberOfQuestion;
-
-    /**
-     * @var AcceptedQuestion[] $questions
-     */
-    public $questions;
 
     public static function create(
         SubmittedQuiz $submittedQuiz,
@@ -57,7 +46,10 @@ class AcceptedQuiz extends Model
         $acceptedQuiz->accepted_course_id = $acceptedCourseID;
         $acceptedQuiz->duration = $submittedQuiz->duration;
         $acceptedQuiz->threshold = $submittedQuiz->threshold;
-        $acceptedQuiz->correct_answers = $submittedQuiz->correct_answers;
+        $submittedQuestions = $submittedQuiz->questions;
+        $acceptedQuiz->updateQuestions($submittedQuestions);
+
+        $acceptedQuiz->save();
 
         return $acceptedQuiz;
     }
@@ -67,17 +59,40 @@ class AcceptedQuiz extends Model
     ) {
         $this->duration = $submittedQuiz->duration;
         $this->threshold = $submittedQuiz->threshold;
-        $this->correct_answers = $submittedQuiz->correct_answers;
-    }
 
-    public function findByCourseID(String $courseID){
+        $submittedQuestions = $submittedQuiz->questions;
+        $this->updateQuestions($submittedQuestions);
 
+        $this->save();
     }
 
     /**
-     * @param AcceptedQuestion[] $questions
+     * @param String $courseID
+     * @return \Illuminate\Database\Eloquent\Builder|Model|object|null
      */
-    private function loadQuestions(array $questions){
+    public static function findByCourseID(String $courseID){
+        $quiz = AcceptedQuiz::where('accepted_course_id', $courseID)->first();
 
+        if (!isset($quiz)) return null;
+
+        $quiz->questions;
+
+        return $quiz;
+    }
+
+    /**
+     * Eloquent relationship for fetching questions from database
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function questions(){
+        return $this->hasMany(AcceptedQuestion::class, 'accepted_quiz_id', 'id')->orderBy('no');
+    }
+
+    private function updateQuestions($submittedQuestions){
+        $res = "";
+        foreach ($submittedQuestions as $submittedQuestion){
+            $res .= $submittedQuestion->correct_answer;
+        }
+        $this->correct_answers = $res;
     }
 }

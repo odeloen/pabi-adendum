@@ -131,7 +131,7 @@
         <button type="button" class="btn bg-danger-700 btn-float btn-float-lg tutup-kelas" style="width:100%; margin-bottom: 10px;" data-toggle="modal" data-target="#modal_commentClass">
             <i class="icon-cross2"></i> <span>Tolak</span>
         </button>
-        <a href="">
+        <a href="{{route('admin.quiz.show', $course->instance->id)}}">
             <button type="button" class="btn bg-indigo-800 btn-float btn-float-lg" style="width:100%; margin-bottom: 10px;" data-toggle="modal" data-target="#modal_form_horizontal">
                 <i class="icon-graduation2 "></i> <span>LIHAT KUIS</span>
             </button>

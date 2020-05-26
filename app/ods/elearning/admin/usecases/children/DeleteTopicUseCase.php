@@ -7,7 +7,7 @@ use App\Ods\Core\Requests\UseCaseRequest;
 use App\Ods\Core\Requests\UseCaseResponse;
 use Illuminate\Support\Facades\DB;
 
-class DeleteTopicUseCase 
+class DeleteTopicUseCase
 {
     public function execute($useCaseRequest) : UseCaseResponse
     {
@@ -25,7 +25,7 @@ class DeleteTopicUseCase
             $originalTopicRepository->delete($originalTopic);
             $submittedTopicRepository->delete($submittedTopic);
         } catch (\Throwable $th) {
-            DB::rollBack();
+            DB::connection('odssql')->rollBack();
             $response = UseCaseResponse::createErrorResponse('Gagal menerima pengajuan (menghapus topik'. $submittedTopic->instance->name .'), silahkan coba beberapa saat lagi');
             return $response;
         }

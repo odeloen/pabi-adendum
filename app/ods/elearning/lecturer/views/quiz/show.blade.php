@@ -20,6 +20,9 @@
     <div class="alert alpha-indigo border-indigo alert-styled-left">
         Ujian Kelas <b>{{$course->name}}</b>
     </div>
+    <div class="text-right mt-5 mb-10">
+        <button type="submit" formaction="{{route('lecturer.question.delete')}}" formmethod="post" class="btn bg-grey-300">Hapus Pertanyaan dan Jawaban</button>
+    </div>
     <div class="panel panel-flat border-left-xlg border-left-indigo">
         <div class="panel-heading">
             <span id="question_number_text" class="label label-default" style="font-size: 22pt;margin-bottom:5px;">{{$active_question->no}}</span>
@@ -45,23 +48,23 @@
         <div class="panel-body text-center" >
             <div class="col-lg-12">
                 <label class="radio-inline" style="font-size: 12pt;">
-                    <div class="choice"><input type="radio" class="control-custom" ></div>
+                    <div class="choice"><input @if($active_question->correct_answer === 'A') checked @endif name="correct_answer" value="A" type="radio" class="control-custom" ></div>
                     A
                 </label>
                 <label class="radio-inline"style="font-size: 12pt;">
-                    <div class="choice"><input type="radio" class="control-custom" ></div>
+                    <div class="choice"><input @if($active_question->correct_answer === 'B') checked @endif name="correct_answer" value="B" type="radio" class="control-custom" ></div>
                     B
                 </label>
                 <label class="radio-inline"style="font-size: 12pt;">
-                    <div class="choice"><input type="radio" class="control-custom" ></div>
+                    <div class="choice"><input @if($active_question->correct_answer === 'C') checked @endif name="correct_answer" value="C" type="radio" class="control-custom" ></div>
                     C
                 </label>
                 <label class="radio-inline"style="font-size: 12pt;">
-                    <div class="choice"><input type="radio" class="control-custom" ></div>
+                    <div class="choice"><input @if($active_question->correct_answer === 'D') checked @endif name="correct_answer" value="D" type="radio" class="control-custom" ></div>
                     D
                 </label>
                 <label class="radio-inline"style="font-size: 12pt;">
-                    <div class="choice"><input type="radio" class="control-custom" ></div>
+                    <div class="choice"><input @if($active_question->correct_answer === 'E') checked @endif name="correct_answer" value="E" type="radio" class="control-custom" ></div>
                     E
                 </label>
             </div>
@@ -148,7 +151,7 @@
     <div class="sidebar sidebar-opposite sidebar-default sidebar-separate">
         <div class="sidebar-content" >
 
-            <a href="">
+            <a href="{{route('lecturer.course.show', $course->id)}}">
                 <button type="button" class="btn bg-grey-300 btn-float btn-float-lg" style="width:100%; margin-bottom: 10px;">
                     <i class="icon-circle-left2"></i> <span>Kembali ke Kelas</span>
                 </button>

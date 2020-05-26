@@ -27,7 +27,7 @@ class DeleteCourseUseCase
             $submittedCourseRepository->delete($submittedCourse);
             $acceptedCourse->instance->delete();
         } catch (\Throwable $th) {
-            DB::rollBack();
+            DB::connection('odssql')->rollBack();
             $response = UseCaseResponse::createErrorResponse('Gagal menerima pengajuan (menghapus kelas '. $submittedCourse->instance->name .'), silahkan coba beberapa saat lagi');
             return $response;
         }

@@ -5,6 +5,7 @@ namespace App\Ods\Elearning\Core\Entities\Courses;
 use App\Ods\Elearning\Core\Config\Naming;
 use App\Ods\Elearning\Core\Entities\Modifiers\ActionModifier;
 use App\Ods\Elearning\Core\Entities\Modifiers\VerificationModifier;
+use App\Ods\Elearning\Core\Entities\Quizzes\SubmittedQuiz;
 use App\Ods\Elearning\Core\Entities\Topics\SubmittedTopic;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -32,6 +33,10 @@ class SubmittedCourse extends Model
     /** @return SubmittedTopic */
     public function topics(){
         return $this->hasMany(Naming::getNamespace().'Entities\Topics\SubmittedTopic', 'submitted_course_id', 'id');
+    }
+
+    public function quiz(){
+        return $this->hasOne(SubmittedQuiz::class, 'submitted_course_id', 'id');
     }
 
     public function lecturer(){
