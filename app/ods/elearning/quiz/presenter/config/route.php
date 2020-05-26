@@ -9,6 +9,9 @@ Route::namespace('Web')->middleware(['web'])->group(function () {
     Route::get("member/quiz", function(){
         return view('Ods\Elearning\Quiz::member.quiz');
     });
+    Route::get("member/post", function(){
+        return view('Ods\Elearning\Quiz::member.post-quiz');
+    });
     Route::get("lecturer/quiz", function(){
         return view('Ods\Elearning\Quiz::lecturer.quiz');
     });
