@@ -8,6 +8,7 @@ use App\Ods\Elearning\Core\Entities\Courses\SubmittedCourse;
 use App\Ods\Elearning\Core\Entities\Modifiers\ActionModifier;
 use App\Ods\Elearning\Core\Entities\Modifiers\VerificationModifier;
 use App\Ods\Elearning\Core\Entities\Questions\AcceptedQuestion;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Uuid\Uuid;
 
@@ -22,9 +23,8 @@ use Ramsey\Uuid\Uuid;
  * @property String $original_quiz_id
  * @property \Carbon\Carbon $duration
  * @property int $threshold
- * @property String $correct_answers
  */
-class SubmittedQuiz
+class SubmittedQuiz extends Model
 {
     use SoftDeletes;
     use ActionModifier;
@@ -58,7 +58,8 @@ class SubmittedQuiz
         $submittedQuiz->submitted_course_id = $submittedCourseID;
         $submittedQuiz->duration = $originalQuiz->duration;
         $submittedQuiz->threshold = $originalQuiz->threshold;
-        $submittedQuiz->correct_answers = $originalQuiz->correct_answers;
+
+        $submittedQuiz->save();
 
         return $submittedQuiz;
     }

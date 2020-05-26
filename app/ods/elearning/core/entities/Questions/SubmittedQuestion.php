@@ -6,6 +6,7 @@ namespace App\Ods\Elearning\Core\Entities\Questions;
 
 use App\Ods\Elearning\Core\Entities\Modifiers\ActionModifier;
 use App\Ods\Elearning\Core\Entities\Modifiers\VerificationModifier;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Uuid\Uuid;
 
@@ -27,14 +28,14 @@ use Ramsey\Uuid\Uuid;
  * @property String $answer_e
  * @property $correct_answer
  */
-class SubmittedQuestion
+class SubmittedQuestion extends Model
 {
     use SoftDeletes;
     use ActionModifier;
     use VerificationModifier;
 
     protected $connection = 'odssql';
-    protected $table = 'original_questions';
+    protected $table = 'submitted_questions';
     protected $primaryKey = 'id';
     public $incrementing = false;
 
@@ -55,6 +56,8 @@ class SubmittedQuestion
         $submittedQuestion->answer_d = $originalQuestion->answer_d;
         $submittedQuestion->answer_e = $originalQuestion->answer_e;
         $submittedQuestion->correct_answer = $originalQuestion->correct_answer;
+
+        $submittedQuestion->save();
 
         return $submittedQuestion;
     }

@@ -70,6 +70,7 @@ class AnnouncementEloquentRepository implements IAnnouncementRepository
     public function insert(Announcement $announcementDomainModel, $image = null){
         $announcementDataModel = AnnouncementDataModel::create($announcementDomainModel);
         $announcementDataModel->created_at = Carbon::now();
+        $announcementDataModel->updated_at = Carbon::now();
 
         $this->insertImage($announcementDataModel, $image);
 
