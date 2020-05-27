@@ -121,6 +121,7 @@
 
                 <form action="{{route('lecturer.quiz.update')}}" method="POST"  enctype="multipart/form-data">
                     @csrf
+                    <input type="hidden" name="course_id" value="{{$course->id}}">
                     <input type="hidden" name="quiz_id" value="{{$quiz->id}}">
                     <div class="modal-body">
                         <div class="form-group">

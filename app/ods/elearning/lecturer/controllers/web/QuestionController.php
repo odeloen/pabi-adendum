@@ -30,7 +30,25 @@ class QuestionController extends Controller
     }
 
     public function create(Request $request){
+        $validator = Validator::make($request->all(), [
+            'course_id' => 'required',
+            'quiz_id' => 'required',
+        ]);
+
+        if ($validator->fails()){
+            Alert::error("Error", "Isian kurang lengkap");
+            return back()->withErrors($validator)->withInput($request->all());
+        }
+
+        $courseID = $request->course_id;
         $quizID = $request->quiz_id;
+
+        $course = Course::find($courseID);
+
+        if ($course->lock){
+            Alert::error("Error", "Kelas sedang dalam pengajuan");
+            return back();
+        }
 
         $quiz = OriginalQuiz::find($quizID);
 
@@ -45,6 +63,7 @@ class QuestionController extends Controller
 
     public function update(Request $request){
         $validator = Validator::make($request->all(), [
+            'course_id' => 'required',
             'quiz_id' => 'required',
             'question_id' => 'required',
             'description' => 'required',
@@ -57,11 +76,19 @@ class QuestionController extends Controller
             return back()->withErrors($validator)->withInput($request->all());
         }
 
+        $courseID = $request->course_id;
         $quizID = $request->quiz_id;
         $questionID = $request->question_id;
         $description = $request->description;
         $answers = $request->answers;
         $correctAnswer = $request->correct_answer;
+
+        $course = Course::find($courseID);
+
+        if ($course->lock){
+            Alert::error("Error", "Kelas sedang dalam pengajuan");
+            return back();
+        }
 
         $quiz = OriginalQuiz::find($quizID);
 
@@ -95,6 +122,13 @@ class QuestionController extends Controller
         $courseID = $request->course_id;
         $quizID = $request->quiz_id;
         $questionID = $request->question_id;
+
+        $course = Course::find($courseID);
+
+        if ($course->lock){
+            Alert::error("Error", "Kelas sedang dalam pengajuan");
+            return back();
+        }
 
         $quiz = OriginalQuiz::find($quizID);
 

@@ -47,6 +47,7 @@ class QuizController extends Controller
 
     public function update(Request $request){
         $validator = Validator::make($request->all(), [
+            'course_id' => 'required',
             'quiz_id' => 'required',
             'duration' => 'required|numeric',
             'threshold' => 'required|numeric',
@@ -57,9 +58,17 @@ class QuizController extends Controller
             return back()->withErrors($validator)->withInput($request->all());
         }
 
+        $courseID = $request->course_id;
         $quizID = $request->quiz_id;
         $duration = $request->duration;
         $threshold = $request->threshold;
+
+        $course = Course::find($courseID);
+
+        if ($course->lock){
+            Alert::error("Error", "Kelas sedang dalam pengajuan");
+            return back();
+        }
 
         $quiz = OriginalQuiz::find($quizID);
 
