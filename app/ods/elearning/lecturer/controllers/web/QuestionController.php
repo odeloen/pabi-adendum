@@ -99,10 +99,10 @@ class QuestionController extends Controller
         $quiz = OriginalQuiz::find($quizID);
 
         $quiz->removeQuestion($questionID);
-        $question = $quiz->questions[0];
+        $questions = OriginalQuestion::where('original_quiz_id', $quiz->id)->orderBy('no')->get();
 
         Alert::success("Success", "Berhasil menghapus pertanyaan");
 
-        return redirect()->route('lecturer.question.show', [$courseID, $quizID, $question->id]);
+        return redirect()->route('lecturer.question.show', [$courseID, $quizID, $questions[0]->id]);
     }
 }
