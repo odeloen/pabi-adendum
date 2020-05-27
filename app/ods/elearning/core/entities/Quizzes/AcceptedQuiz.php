@@ -7,6 +7,8 @@ namespace App\Ods\Elearning\Core\Entities\Quizzes;
 use App\Ods\Elearning\Core\Entities\Modifiers\ActionModifier;
 use App\Ods\Elearning\Core\Entities\Modifiers\VerificationModifier;
 use App\Ods\Elearning\Core\Entities\Questions\AcceptedQuestion;
+use App\Ods\Elearning\Member\Entities\AnswerViewModel;
+use App\Ods\Elearning\Member\Entities\QuestionViewModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Uuid\Uuid;
@@ -78,6 +80,56 @@ class AcceptedQuiz extends Model
         $quiz->questions;
 
         return $quiz;
+    }
+
+    public static function takeQuiz(String $courseID){
+        $quiz = AcceptedQuiz::where('accepted_course_id', $courseID)->first();
+
+        if (!isset($quiz)) return null;
+
+        $quiz->randomizeQuestions();
+
+        return $quiz;
+    }
+
+    private function randomizeQuestions(){
+        $rawQuestions = $this->questions;
+
+        $randomizedQuestions = [];
+        foreach($rawQuestions as $rawQuestion){
+            $visitCount = 0;
+            $visitedArray = [
+                0 => false,
+                1 => false,
+                2 => false,
+                3 => false,
+                4 => false
+            ];
+
+            $rawAnswers = [
+                0 => new AnswerViewModel($rawQuestion->answer_a, 'A'),
+                1 => new AnswerViewModel($rawQuestion->answer_b, 'B'),
+                2 => new AnswerViewModel($rawQuestion->answer_c, 'C'),
+                3 => new AnswerViewModel($rawQuestion->answer_d, 'D'),
+                4 => new AnswerViewModel($rawQuestion->answer_e, 'E'),
+            ];
+
+            $randomizedAnswers = [];
+            while($visitCount < sizeof($visitedArray)) {
+                $randomizedVisitor = mt_rand(0, 4);
+                while ($visitedArray[$randomizedVisitor]) {
+                    $randomizedVisitor = mt_rand(0, 4);
+                }
+
+                $randomizedAnswers[] = $rawAnswers[$randomizedVisitor];
+                $visitedArray[$randomizedVisitor] = true;
+                $visitCount++;
+            }
+
+            $randomizedQuestions[] = new QuestionViewModel($rawQuestion->no, $rawQuestion->description, $randomizedAnswers);
+        }
+
+        $this->questions = collect($randomizedQuestions);
     }
 
     /**

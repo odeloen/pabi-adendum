@@ -18,10 +18,10 @@ class CreateMemberQuizHistoriesTable extends Migration
             $table->string('accepted_course_id');
             $table->string('accepted_quiz_id');
             $table->integer('user_id');
-            $table->integer('score');
-            $table->integer('verdict');
+            $table->integer('score')->default(0);
+            $table->integer('verdict')->default(0);
             $table->string('answers');
-            $table->timestamp('started_at')->nullable();
+            $table->timestamp('started_at');
             $table->timestamp('ended_at')->nullable();
             $table->softDeletes();
             $table->timestamps();

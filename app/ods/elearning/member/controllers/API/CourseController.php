@@ -38,7 +38,7 @@ class CourseController extends Controller
         $this->topicRepository = new AcceptedTopicRepository();
         $this->materialRepository = new AcceptedMaterialRepository();
         $this->categoryRepository = new CategoryRepository();
-    } 
+    }
 
     public function search(Request $request){
         $validator = Validator::make($request->all(), [

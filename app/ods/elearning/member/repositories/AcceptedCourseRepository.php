@@ -50,7 +50,7 @@ class AcceptedCourseRepository
 
             $resultCourse = new AcceptedCourse($course);
             $resultCourse->categories = $course->categories;
-            $resultCourse->lecturer = $course->lecturer;
+//            $resultCourse->lecturer = $course->lecturer;
 
             $resultCourses[] = $resultCourse;
         }

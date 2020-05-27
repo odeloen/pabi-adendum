@@ -63,8 +63,8 @@
 @if (!empty($course))
     <div class="sidebar sidebar-opposite sidebar-default sidebar-separate">
         <div class="sidebar-content">
-        
-            <a href="">
+
+            <a href="{{route('member.quiz.pre', $course->instance->id)}}">
                 <button type="button" class="btn bg-indigo-800 btn-float btn-float-lg" style="width:100%; margin-bottom: 10px;" data-toggle="modal" data-target="#modal_form_horizontal">
                     <i class="icon-graduation2 "></i> <span>IKUT KUIS</span>
                 </button>

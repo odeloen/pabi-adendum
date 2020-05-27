@@ -47,6 +47,7 @@ class MemberRepository
         $member = new Member;
 
         $member->id = $data['user_id'];
+        $member->pabi_sejahtera = $data['no_pabi_sejahtera'];
         $member->fullname = $data['firstname'].' '.$data['lastname'];
         $member->email = $data['email'];
 

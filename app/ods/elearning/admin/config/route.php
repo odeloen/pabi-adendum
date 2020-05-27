@@ -18,4 +18,6 @@ Route::namespace('Web')->middleware(['web', 'login', 'admin'])->group(function (
 
     Route::get('submissions/{courseID}/quiz', 'QuizController@show')->name('admin.quiz.show');
     Route::get('quiz/question/{courseID}:{quizID}:{questionID}', 'QuestionController@show')->name('admin.question.show');
+
+    Route::get('quiz/history', 'QuizHistoryController@list')->name('admin.quiz.history');
 });

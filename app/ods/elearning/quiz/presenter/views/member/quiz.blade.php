@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="col-sm-3">
-    
+
     <div class="panel panel-white">
         <div class="panel-heading">
             <div class="panel-title text-semibold">
@@ -40,16 +40,16 @@
             <br>
             <h4 class="panel-title"><span class="text-semibold">Pertanyaan:</h4>
         </div>
-        
-        
+
+
         <div class="panel-body" style="font-size:12pt;">
             Pertanyaan
         </div>
     </div>
-    
+
     <div class="panel panel-flat border-left-lg border-left-info">
         <div class="panel-body">
-            <input type="radio" class="control-custom" >
+            <input name="choice" type="radio" class="control-custom" >
             <br>
             <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px; margin-top:10px;">Jawaban A</span>
             <br>
@@ -60,7 +60,7 @@
     </div>
     <div class="panel panel-flat border-left-lg border-left-info">
         <div class="panel-body">
-            <input type="radio" class="control-custom" >
+            <input name="choice" type="radio" class="control-custom" >
             <br>
             <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px; margin-top:10px;">Jawaban B</span>
             <br>
@@ -71,7 +71,7 @@
     </div>
     <div class="panel panel-flat border-left-lg border-left-info">
         <div class="panel-body">
-            <input type="radio" class="control-custom" >
+            <input name="choice" type="radio" class="control-custom" >
             <br>
             <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px; margin-top:10px;">Jawaban C</span>
             <br>
@@ -82,7 +82,7 @@
     </div>
     <div class="panel panel-flat border-left-lg border-left-info">
         <div class="panel-body">
-            <input type="radio" class="control-custom" >
+            <input name="choice" type="radio" class="control-custom" >
             <br>
             <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px; margin-top:10px;">Jawaban D</span>
             <br>
@@ -93,7 +93,7 @@
     </div>
     <div class="panel panel-flat border-left-lg border-left-info">
         <div class="panel-body">
-            <input type="radio" class="control-custom" >
+            <input name="choice" type="radio" class="control-custom" >
             <br>
             <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px; margin-top:10px;">Jawaban E</span>
             <br>
@@ -111,7 +111,7 @@
 @section('sidebar-right')
     <div class="sidebar sidebar-opposite sidebar-default sidebar-separate">
         <div class="sidebar-content" >
-        
+
             <a href="">
                 <button type="button" class="btn bg-warning-300 btn-float btn-float-lg" style="width:100%; margin-bottom: 10px;">
                     <i class=" icon-checkmark"></i> <span>Selesai</span>
@@ -140,7 +140,7 @@
                 </div>
             </div>
             <div class="panel panel-flat border-top-primary">
-                
+
                 <div class="panel-body text-center">
                     <h6><span class="text-semibold">Batas Nilai Bawah Kelulusan</h6>
                     <h2><span class="text-semibold">80</h2>

@@ -81,7 +81,6 @@ class QuestionController extends Controller
     }
 
     public function delete(Request $request){
-//        dd($request);
         $validator = Validator::make($request->all(), [
             'course_id' => 'required',
             'quiz_id' => 'required',

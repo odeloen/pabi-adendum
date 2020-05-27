@@ -10,6 +10,10 @@ Route::namespace('Web')->middleware(['web', 'login', 'member'])->group(function 
     Route::post('courses/unfollow', 'CourseController@unfollow')->name('member.course.unfollow');
 
     Route::get('material/{submssionID}:{topicID}:{materialID}', 'MaterialController@show')->name('member.material.show');
+
+    Route::post('quiz/take', 'QuizController@quiz')->name('member.quiz.quiz');
+    Route::post('quiz/post', 'QuizController@postQuiz')->name('member.quiz.post');
+    Route::get('quiz/{courseID}', 'QuizController@preQuiz')->name('member.quiz.pre');
 });
 
 Route::namespace('API')->prefix('api')->middleware(['web','api'])->group(function () {
