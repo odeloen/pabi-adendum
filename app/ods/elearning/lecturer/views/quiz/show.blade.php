@@ -174,9 +174,15 @@
                         <div class="btn-group">
                             @foreach($quiz->questions as $question)
                                 <a href="{{route('lecturer.question.show', [$course->id, $quiz->id, $question->id])}}">
-                                    <button type="button" class="btn btn-default" style="width:32%; margin-bottom:5px;">
-                                        {{$question->no}}
-                                    </button>
+                                    @if($question->isValid())
+                                        <button type="button" class="btn btn-primary" style="width:32%; margin-bottom:5px;">
+                                            {{$question->no}}
+                                        </button>
+                                    @else
+                                        <button type="button" class="btn btn-default" style="width:32%; margin-bottom:5px;">
+                                            {{$question->no}}
+                                        </button>
+                                    @endif
                                 </a>
                             @endforeach
                         </div>
