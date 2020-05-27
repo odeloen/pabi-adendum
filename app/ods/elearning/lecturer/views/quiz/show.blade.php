@@ -25,7 +25,7 @@
     </div>
     <div class="panel panel-flat border-left-xlg border-left-indigo">
         <div class="panel-heading">
-            <span id="question_number_text" class="label label-default" style="font-size: 22pt;margin-bottom:5px;">{{$active_question->no}}</span>
+            <span id="question_number_text" class="label bg-indigo-300" style="font-size: 22pt;margin-bottom:5px;">{{$active_question->no}}</span>
             <br>
             <h4 class="panel-title"><span class="text-semibold">Pertanyaan:</h4>
         </div>

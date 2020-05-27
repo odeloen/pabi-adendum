@@ -18,7 +18,7 @@
 </div>
 <div class="panel panel-flat border-left-xlg border-left-indigo">
     <div class="panel-heading">
-        <span class="label label-default" style="font-size: 22pt;margin-bottom:5px;">78</span>
+        <span class="label bg-indigo-300" style="font-size: 22pt;margin-bottom:5px;">{{$active_question->no}}</span>
         <br>
         <h4 class="panel-title"><span class="text-semibold">Pertanyaan:</h4>
     </div>
@@ -121,9 +121,15 @@
                         <div class="btn-group">
                             @foreach($quiz->questions as $question)
                                 <a href="{{route('admin.question.show', [$course->id, $quiz->id, $question->id])}}">
+                                    @if($question->no == $active_question->no)
+                                    <button type="button" class="btn bg-indigo-300" style="width:32%; margin-bottom:5px;">
+                                        {{$question->no}}
+                                    </button>
+                                    @else
                                     <button type="button" class="btn btn-default" style="width:32%; margin-bottom:5px;">
                                         {{$question->no}}
                                     </button>
+                                    @endif
                                 </a>
                             @endforeach
                         </div>

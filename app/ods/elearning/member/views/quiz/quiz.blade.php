@@ -60,7 +60,7 @@
         <div class="panel-body">
             <input id="question_answer_a_check" onclick="onClickAnswer(0)" name="choice" type="radio" class="control-custom" >
             <br>
-            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;">Jawaban A</span>
+            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;margin-top:10px;">Jawaban A</span>
             <br>
             <div id="question_answer_a_text">Jawaban</div>
         </div>
@@ -69,7 +69,7 @@
         <div class="panel-body">
             <input id="question_answer_b_check" onclick="onClickAnswer(1)" name="choice" type="radio" class="control-custom" >
             <br>
-            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;">Jawaban B</span>
+            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;margin-top:10px;">Jawaban B</span>
             <br>
             <div id="question_answer_b_text">Jawaban</div>
         </div>
@@ -78,7 +78,7 @@
         <div class="panel-body">
             <input id="question_answer_c_check" onclick="onClickAnswer(2)" name="choice" type="radio" class="control-custom" >
             <br>
-            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;">Jawaban C</span>
+            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;margin-top:10px;">Jawaban C</span>
             <br>
             <div id="question_answer_c_text">Jawaban</div>
         </div>
@@ -87,7 +87,7 @@
         <div class="panel-body">
             <input id="question_answer_d_check" onclick="onClickAnswer(3)" name="choice" type="radio" class="control-custom" >
             <br>
-            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;">Jawaban D</span>
+            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;margin-top:10px;">Jawaban D</span>
             <br>
             <div id="question_answer_d_text">Jawaban</div>
         </div>
@@ -96,7 +96,7 @@
         <div class="panel-body">
             <input id="question_answer_e_check" onclick="onClickAnswer(4)" name="choice" type="radio" class="control-custom" >
             <br>
-            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;">Jawaban E</span>
+            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;margin-top:10px;">Jawaban E</span>
             <br>
             <div id="question_answer_e_text">Jawaban</div>
         </div>
@@ -148,6 +148,13 @@
 @endsection
 
 @section('addjs')
+<script src="{{asset('template/global_assets/js/plugins/forms/styling/uniform.min.js')}}"></script>
+<script>
+
+    $(".control-custom").uniform({
+        wrapperClass: 'border-indigo-600'
+    });
+</script>
 {{--Script for initialization--}}
 <script>
     let questions = {!! $quiz->questions !!};
@@ -214,7 +221,12 @@
         $('#question_answer_d_text').html(question.answers[3].description)
         $('#question_answer_e_text').html(question.answers[4].description)
 
-        $('.control-custom').prop('checked', false)
+        //$('.control-custom').prop('checked', false)
+        $('#question_answer_a_check').prop('checked', false).uniform('refresh')
+        $('#question_answer_b_check').prop('checked', false).uniform('refresh')
+        $('#question_answer_c_check').prop('checked', false).uniform('refresh')
+        $('#question_answer_d_check').prop('checked', false).uniform('refresh')
+        $('#question_answer_e_check').prop('checked', false).uniform('refresh')
 
         if (member_answers[active_question.no - 1] == 'A'){
             $('#question_answer_a_check').prop('checked', true)
