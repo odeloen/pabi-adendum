@@ -88,7 +88,7 @@ class QuizHistory extends Model
 
         $score = $rightAnswerCount*100;
         $score = $score/$questionCount;
-        $this->score = $score;
+        $this->score = (int) $score;
 
         if ($score >= $quiz->threshold) $this->verdict = 1;
         else $this->verdict = 0;
