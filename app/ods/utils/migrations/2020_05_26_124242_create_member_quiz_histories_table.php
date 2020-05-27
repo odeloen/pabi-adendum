@@ -13,7 +13,7 @@ class CreateMemberQuizHistoriesTable extends Migration
      */
     public function up()
     {
-        Schema::connection('oddsql')->create('member_quiz_histories', function (Blueprint $table) {
+        Schema::connection('odssql')->create('member_quiz_histories', function (Blueprint $table) {
             $table->string('id', 36)->primary();
             $table->string('accepted_course_id');
             $table->string('accepted_quiz_id');
@@ -21,8 +21,8 @@ class CreateMemberQuizHistoriesTable extends Migration
             $table->integer('score');
             $table->integer('verdict');
             $table->string('answers');
-            $table->timestamp('started_at');
-            $table->timestamp('finished_at');
+            $table->timestamp('started_at')->nullable();
+            $table->timestamp('ended_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

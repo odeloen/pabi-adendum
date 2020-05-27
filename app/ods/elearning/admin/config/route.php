@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 
-Route::namespace('Web')->middleware(['web', 'login', 'admin'])->group(function () {    
+Route::namespace('Web')->middleware(['web', 'login', 'admin'])->group(function () {
     Route::get('submissions/list', 'SubmissionController@list')->name('admin.submission.list');
     Route::get('submissions/{submissionID}', 'SubmissionController@show')->name('admin.submission.show');
     Route::post('submissions/comment', 'SubmissionController@createComment')->name('admin.comment.create');
@@ -15,4 +15,7 @@ Route::namespace('Web')->middleware(['web', 'login', 'admin'])->group(function (
     Route::post('categories/create', 'CategoryController@create')->name('admin.category.create');
     Route::post('categories/update', 'CategoryController@update')->name('admin.category.update');
     Route::post('categories/delete', 'CategoryController@delete')->name('admin.category.delete');
+
+    Route::get('submissions/{courseID}/quiz', 'QuizController@show')->name('admin.quiz.show');
+    Route::get('quiz/question/{courseID}:{quizID}:{questionID}', 'QuestionController@show')->name('admin.question.show');
 });

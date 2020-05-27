@@ -22,16 +22,18 @@ class SubmittedCourseRepository
             foreach ($submittedCourses as $submittedCourse) {
                 $course = new SubmittedCourse($submittedCourse);
                 $course->categories = $course->instance->categories;
-                $course->lecturer = $course->instance->lecturer;
                 $courses[] = $course;
             }
         }
         return collect($courses)->sortByDesc('instance.created_at');
     }
 
-    public function find(string $id) : SubmittedCourse
+    public function find(string $id)
     {
         $submittedCourse = SubmittedCourseModel::find($id);
+
+        if(!isset($submittedCourse)) return null;
+
         $submittedCourse->created_at_string = $submittedCourse->getCreatedAt();
         $submittedCourse->updated_at_string = $submittedCourse->getUpdatedAt();
 

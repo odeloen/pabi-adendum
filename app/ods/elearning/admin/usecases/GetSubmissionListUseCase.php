@@ -15,10 +15,10 @@ class GetSubmissionListUseCase
         $this->submittedCourseRepository = $submittedCourseRepository;
         $this->lecturerRepository = $lecturerRepository;
     }
-    
+
     public function execute() : UseCaseResponse
     {
-        
+
         $submissions = $this->submittedCourseRepository->all();
 
         if (!empty($submissions)){
@@ -28,7 +28,7 @@ class GetSubmissionListUseCase
         }
 
         try {
-            
+
         } catch (\Throwable $th) {
             $response = UseCaseResponse::createErrorResponse('Gagal tersambung dengan pengajuan terkait');
             return $response;

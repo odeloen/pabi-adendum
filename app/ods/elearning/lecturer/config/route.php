@@ -31,6 +31,7 @@ Route::namespace('Web')->middleware(['web', 'login', 'member'])->group(function 
     Route::get('quiz/question/{courseID}:{quizID}:{questionID}', 'QuestionController@show')->name('lecturer.question.show');
     Route::post('quiz/question/create', 'QuestionController@create')->name('lecturer.question.create');
     Route::post('quiz/question/update', 'QuestionController@update')->name('lecturer.question.update');
+    Route::post('quiz/question/delete', 'QuestionController@delete')->name('lecturer.question.delete');
 });
 
 Route::namespace('API')->prefix('api')->name('api.')->middleware(['api'])->group(function () {

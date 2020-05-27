@@ -7,7 +7,7 @@ use App\Ods\Core\Requests\UseCaseResponse;
 use Illuminate\Support\Facades\DB;
 use App\Ods\Notification\Usecases\CreateNotificationUseCase;
 
-class DeclineSubmissionUseCase 
+class DeclineSubmissionUseCase
 {
     public function execute($useCaseRequest) : UseCaseResponse
     {
@@ -24,13 +24,13 @@ class DeclineSubmissionUseCase
         $originalCourse = $submittedCourse->original();
         $originalCourse->releaseLock();
 
-        DB::beginTransaction();
+        DB::connection('odssql')->beginTransaction();
         try {
             $submittedCourseRepository->save($submittedCourse);
             $submittedCourseRepository->delete($submittedCourse);
             $originalCourse->instance->save();
         } catch (\Throwable $th) {
-            DB::rollBack();
+            DB::connection('odssql')->rollBack();
             $response = UseCaseResponse::createErrorResponse('Gagal menolak pengajuan (kelas), silahkan coba beberapa saat lagi');
             return $response;
         }
@@ -41,7 +41,7 @@ class DeclineSubmissionUseCase
             try {
                 $submittedTopicRepository->delete($submittedTopic);
             } catch (\Throwable $th) {
-                DB::rollBack();
+                DB::connection('odssql')->rollBack();
                 $response = UseCaseResponse::createErrorResponse('Gagal menolak pengajuan (topik), silahkan coba beberapa saat lagi');
                 return $response;
             }
@@ -52,22 +52,22 @@ class DeclineSubmissionUseCase
                 try {
                     $submittedMaterialRepository->delete($submittedMaterial);
                 } catch (\Throwable $th) {
-                    DB::rollBack();
+                    DB::connection('odssql')->rollBack();
                     $response = UseCaseResponse::createErrorResponse('Gagal menolak pengajuan (material), silahkan coba beberapa saat lagi');
                     return $response;
                 }
             }
         }
-        
+
         try {
             $createNotif = new CreateNotificationUseCase();
-            $createNotif->execute($submittedCourse->instance->lecturer_id, "Pengajuan kelas ditolak", "Pengajuan kelas \"".$submittedCourse->instance->name."\" telah ditolak");    
+            $createNotif->execute($submittedCourse->instance->lecturer_id, "Pengajuan kelas ditolak", "Pengajuan kelas \"".$submittedCourse->instance->name."\" telah ditolak");
         } catch (\Throwable $th) {
-            DB::rollBack();
+            DB::connection('odssql')->rollBack();
             $response = UseCaseResponse::createErrorResponse('Gagal membuat notifikasi');
             return $response;
         }
-        DB::commit();
+        DB::connection('odssql')->commit();
 
         $response = UseCaseResponse::createMessageResponse('Berhasil membuat pengajuan');
 

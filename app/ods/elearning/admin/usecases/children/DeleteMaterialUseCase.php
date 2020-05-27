@@ -7,7 +7,7 @@ use App\Ods\Core\Requests\UseCaseRequest;
 use App\Ods\Core\Requests\UseCaseResponse;
 use Illuminate\Support\Facades\DB;
 
-class DeleteMaterialUseCase 
+class DeleteMaterialUseCase
 {
     public function execute($useCaseRequest) : UseCaseResponse
     {
@@ -23,7 +23,7 @@ class DeleteMaterialUseCase
             $originalMaterialRepository->delete($originalMaterial);
             $submittedMaterialRepository->delete($submittedMaterial);
         } catch (\Throwable $th) {
-            DB::rollBack();
+            DB::connection('odssql')->rollBack();
             $response = UseCaseResponse::createErrorResponse('Gagal menerima pengajuan (menghapus materi '. $submittedMaterial->instance->name .'), silahkan coba beberapa saat lagi');
             return $response;
         }

@@ -134,16 +134,17 @@ class OriginalQuiz extends Model
     public function removeQuestion(
         String $questionID
     ){
-        $question = OriginalQuestion::find($questionID);
+        $questions = $this->questions;
+        $toBeDeletedQuestion = OriginalQuestion::find($questionID);
 
-        for ($i = $question->no - 1; $i < strlen($this->correct_answers); $i++){
-            $this->correct_answers[$i] = $this->correct_answers[$i + 1];
+        for ($i = $toBeDeletedQuestion->no; $i < $questions->count(); $i++){
+            $question = $questions[$i];
+            $question->no--;
+            $question->save();
         }
-        if (isset($question->answer_a)) $this->correct_answers = substr_replace($this->correct_answers ,"",-1);
-        $this->question_count--;
 
         $this->save();
-        $question->delete();
+        $toBeDeletedQuestion->delete();
     }
 
     /**

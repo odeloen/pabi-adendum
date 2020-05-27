@@ -68,6 +68,7 @@ class SubmissionController extends Controller
         // $useCaseRequest->submittedCourseRepository = $this->submittedCourseRepository;
 
         $useCase = new GetSubmissionListUseCase($this->submittedCourseRepository, $this->lecturerRepository);
+
         $response = $useCase->execute();
 
         Alert::fromResponse($response);

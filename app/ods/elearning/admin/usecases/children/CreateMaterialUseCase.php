@@ -27,7 +27,7 @@ class CreateMaterialUseCase
             $originalMaterialRepository->save($originalMaterial);
             $submittedMaterialRepository->delete($submittedMaterial);
         } catch (\Throwable $th) {
-            DB::rollBack();
+            DB::connection('odssql')->rollBack();
             $response = UseCaseResponse::createErrorResponse('Gagal menerima pengajuan (membuat materi '. $submittedMaterial->instance->name .'), silahkan coba beberapa saat lagi');
             return $response;
         }
