@@ -49,37 +49,57 @@
     
     <div class="panel panel-flat border-left-lg border-left-info">
         <div class="panel-body">
-            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;">Jawaban A</span>
+            <input type="radio" class="control-custom" >
             <br>
-            Jawaban
+            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px; margin-top:10px;">Jawaban A</span>
+            <br>
+            <div>
+                Jawaban
+            </div>
         </div>
     </div>
     <div class="panel panel-flat border-left-lg border-left-info">
         <div class="panel-body">
-            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;">Jawaban B</span>
+            <input type="radio" class="control-custom" >
             <br>
-            Jawaban
+            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px; margin-top:10px;">Jawaban B</span>
+            <br>
+            <div>
+                Jawaban
+            </div>
         </div>
     </div>
     <div class="panel panel-flat border-left-lg border-left-info">
         <div class="panel-body">
-            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;">Jawaban C</span>
+            <input type="radio" class="control-custom" >
             <br>
-            Jawaban
+            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px; margin-top:10px;">Jawaban C</span>
+            <br>
+            <div>
+                Jawaban
+            </div>
         </div>
     </div>
     <div class="panel panel-flat border-left-lg border-left-info">
         <div class="panel-body">
-            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;">Jawaban D</span>
+            <input type="radio" class="control-custom" >
             <br>
-            Jawaban
+            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px; margin-top:10px;">Jawaban D</span>
+            <br>
+            <div>
+                Jawaban
+            </div>
         </div>
     </div>
     <div class="panel panel-flat border-left-lg border-left-info">
         <div class="panel-body">
-            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px;">Jawaban E</span>
+            <input type="radio" class="control-custom" >
             <br>
-            Jawaban
+            <span class="label label-warning" style="font-size: 10pt;margin-bottom:5px; margin-top:10px;">Jawaban E</span>
+            <br>
+            <div>
+                Jawaban
+            </div>
         </div>
     </div>
 </div>
@@ -131,5 +151,11 @@
 @endsection
 
 @section('addjs')
+<script src="{{asset('template/global_assets/js/plugins/forms/styling/uniform.min.js')}}"></script>
+<script>
 
+    $(".control-custom").uniform({
+        wrapperClass: 'border-indigo-600'
+    });
+</script>
 @endsection
