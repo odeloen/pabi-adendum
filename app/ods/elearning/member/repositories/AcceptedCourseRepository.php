@@ -75,7 +75,7 @@ class AcceptedCourseRepository
                 if ($acceptedCourseModel != null){
                     $course = new AcceptedCourse($acceptedCourseModel);
                     $course->categories = $acceptedCourseModel->categories;
-                    $course->lecturer = $acceptedCourseModel->lecturer;
+//                    $course->lecturer = $acceptedCourseModel->lecturer;
                     $courses[] = $course;
                 }
             }
