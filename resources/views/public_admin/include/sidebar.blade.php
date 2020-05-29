@@ -665,10 +665,11 @@ $role_admin = array(1, 2, 3);
 							<li>
 								<a href="#"><i class="icon-display"></i>
 									<span>Pembelajaran Online</span></a>
-								<ul>
-									<li><a href="{{route('admin.category.list')}}" class="legitRipple"><span>Master Pembelajaran Online</span></a></li>
-									<li><a href="{{route('admin.submission.list')}}" class="legitRipple"><span>Pengajuan Kelas</span></a></li>
-								</ul>
+								
+									<ul>
+										<li class="dashboard"><a href="{{route('admin.submission.list')}}" class="legitRipple"><span>Pengajuan Kelas</span></a></li>
+										<li class="dashboard"><a href="{{route('admin.quiz.history')}}" class="legitRipple"><span>Hasil Kuis</span></a></li>
+									</ul>
 							</li>
 						@endif
 						@if(request()->session()->get('pabi_role_id') == 4)
