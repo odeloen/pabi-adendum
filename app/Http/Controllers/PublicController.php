@@ -50,9 +50,9 @@ class PublicController extends Controller
         } else if($role_id == 3){ // admin CABANG
             $ob = new PublicController();
             $ob->get_dashboard_admin();
-            
+
             return view('public_admin.menu_dashboard.dashboard_admin_cabang', compact(['data_activity']));
-        } else { 
+        } else {
             return view('public_admin.menu_dashboard.dashboard', compact(['data_activity']));
         }
     }
@@ -99,9 +99,9 @@ class PublicController extends Controller
             }
             $responseAnnouncement->data['announcements'] = $res;
         }
-        
+
         return view('public_admin.menu_dashboard.dashboard_member',$responseAnnouncement->data
-                , compact('nama_menu')); 
+                , compact('nama_menu'));
     }
 
     public function public_login()
@@ -131,7 +131,7 @@ class PublicController extends Controller
         ]);
 
         $res = json_decode((string) $response->getBody()->getContents(), true);
-            
+
         if ($res['data'] == 'failed') {
             Alert::error($res['info'], 'Email Send Failed');
 
@@ -176,16 +176,16 @@ class PublicController extends Controller
     public function password_login(Request $request)
     {
         $check = DB::table('users')->where('email', session('email'))->first();
-        
+
         if ($check->password !== '') {
             return redirect('/');
-        } 
+        }
 
         return view('public_login.password_login');
     }
 
     public function public_member()
-    {    
+    {
         $data_dashboard = DB::table('setting_landing_page')
             ->select('setting_landing_page.*'
                 , DB::raw('(SELECT count(*) FROM members WHERE pusat_verif=2 and is_non_aktif=1) as jml_dokter')
@@ -199,23 +199,29 @@ class PublicController extends Controller
         $data_tentang_pabi = MasterTentangPabi::all();
 
         // foreach ($data_banner as $data_banner) {}
-        // foreach ($data_tentang_pabi as $data_tentang_pabi) {} 
+        // foreach ($data_tentang_pabi as $data_tentang_pabi) {}
 
+        $data = [
+            'data_dashboard' => $data_dashboard,
+            'data_banner' => $data_banner,
+            'data_tentang_pabi' => $data_tentang_pabi
+        ];
 
-        return view('public_member.menu_dashboard.dashboard'
-            , compact('data_dashboard', 'data_banner', 'data_tentang_pabi, response->data')); 
+        return view('public_member.menu_dashboard.dashboard', $data);
+//        return view('public_member.menu_dashboard.dashboard'
+//            , compact('data_dashboard', 'data_banner', 'data_tentang_pabi, response->data'));
     }
 
     public function updatePassword(Request $request) {
         $update = DB::table('users')->where('email', $request->email)->update([
-            'password' => bcrypt($request->password),   
+            'password' => bcrypt($request->password),
             // 'password_social' => Crypt::encrypt($request->password)
             'password_social' => base64_encode($request->password)
         ]);
-        
+
         $client = new Client();
         $base_url = env('URL_API');
-        
+
         if ($update) {
             $response = $client->post($base_url.'login/with/google', [
                 'headers' => [
@@ -225,8 +231,8 @@ class PublicController extends Controller
                     'email' => $request->email
                 ],
             ]);
-    
-            $res = json_decode((string) $response->getBody()->getContents(), true); 
+
+            $res = json_decode((string) $response->getBody()->getContents(), true);
 
             $user_id = $res['data']['user_id'];
             $check_member = Member::where('user_id', '=', $user_id)->first();
@@ -254,7 +260,7 @@ class PublicController extends Controller
                 default:
                 break;
             }
-    
+
             session([
                 'pabi_username' => $res['data']['username'],
                 'pabi_user_id' => $res['data']['user_id'],
@@ -264,36 +270,36 @@ class PublicController extends Controller
                 'pabi_role_name' => $role_name,
                 'admin_cabang_id' => $res['data']['admin_cabang_id'],
                 'admin_pusat_id' => $res['data']['admin_pusat_id']
-            ]);        
+            ]);
 
             $response = $this->guzzle('GET', 'dashboard_member/'.session('pabi_member_id'), []);
             $response = json_decode($response->getBody()->getContents(), true);
-            $data_member = $response['data']; 
+            $data_member = $response['data'];
 
             $ob = new PublicController();
             $ob->get_dashboard_member($data_member);
-    
+
             if (session('pabi_role_id') == 4) {
                 return redirect()->route('dashboard_member');
             } else {
                 return redirect()->route('dashboard_admin');
             }
         }
-        
+
         return redirect('/');
     }
 
     public function get_dashboard_admin(){
 
-        $role_id = session('pabi_role_id'); 
-        if($role_id == 2 || $role_id == 1){ // admin PUSAT 
+        $role_id = session('pabi_role_id');
+        if($role_id == 2 || $role_id == 1){ // admin PUSAT
             $response = $this->guzzle('GET', 'dashboard_admin_pusat/'.session('admin_pusat_id'), []);
             $response = json_decode($response->getBody()->getContents(), true);
-            $data_member = $response['data']; 
-            
-            $member_verif_belum = 0; 
-            $member_verif_setuju = 0; 
-            $member_verif_tolak = 0; 
+            $data_member = $response['data'];
+
+            $member_verif_belum = 0;
+            $member_verif_setuju = 0;
+            $member_verif_tolak = 0;
             foreach ($data_member['grafik_member'] as $value) {
                 // echo $value['pusat_verif'].'<br><br>';
                 if($value['pusat_verif'] == 1){
@@ -310,34 +316,34 @@ class PublicController extends Controller
             session([
                 'pabi_member_verif_belum' => $member_verif_belum
                 , 'pabi_member_verif_setuju' => $member_verif_setuju
-                , 'pabi_member_verif_tolak' => $member_verif_tolak 
+                , 'pabi_member_verif_tolak' => $member_verif_tolak
 
                 , 'pabi_event_akan_datang_pusat' => $grafik_event_pusat['event_akan_datang_pusat']
-                , 'pabi_event_belum_verif_bayar_pusat' => $grafik_event_pusat['event_belum_verif_bayar_pusat'] 
+                , 'pabi_event_belum_verif_bayar_pusat' => $grafik_event_pusat['event_belum_verif_bayar_pusat']
 
                 , 'pabi_event_akan_datang_cabang_pusat' => $grafik_event_pusat['event_akan_datang_cabang_pusat']
-                , 'pabi_event_belum_verif_bayar_cabang' => $grafik_event_pusat['event_belum_verif_bayar_cabang'] 
+                , 'pabi_event_belum_verif_bayar_cabang' => $grafik_event_pusat['event_belum_verif_bayar_cabang']
 
-                , 'pabi_pindah_cabang_asal_belum_verif' 
-                    => $grafik_event_pusat['pindah_cabang_asal_belum_verif'] 
-                , 'pabi_pindah_cabang_asal_sudah_verif' 
-                    => $grafik_event_pusat['pindah_cabang_asal_sudah_verif'] 
+                , 'pabi_pindah_cabang_asal_belum_verif'
+                    => $grafik_event_pusat['pindah_cabang_asal_belum_verif']
+                , 'pabi_pindah_cabang_asal_sudah_verif'
+                    => $grafik_event_pusat['pindah_cabang_asal_sudah_verif']
 
-                , 'pabi_pindah_cabang_tujuan_belum_verif' 
-                    => $grafik_event_pusat['pindah_cabang_tujuan_belum_verif'] 
-                , 'pabi_pindah_cabang_tujuan_sudah_verif' 
-                    => $grafik_event_pusat['pindah_cabang_tujuan_sudah_verif'] 
+                , 'pabi_pindah_cabang_tujuan_belum_verif'
+                    => $grafik_event_pusat['pindah_cabang_tujuan_belum_verif']
+                , 'pabi_pindah_cabang_tujuan_sudah_verif'
+                    => $grafik_event_pusat['pindah_cabang_tujuan_sudah_verif']
 
             ]);
-        } else if($role_id == 3){ // admin CABANG  
+        } else if($role_id == 3){ // admin CABANG
             $response = $this->guzzle('GET', 'dashboard_admin_cabang/'.session('admin_cabang_id'), []);
             $response = json_decode($response->getBody()->getContents(), true);
             $data_member = $response['data'];
 
-            
-            $member_verif_belum = 0; 
-            $member_verif_setuju = 0; 
-            $member_verif_tolak = 0; 
+
+            $member_verif_belum = 0;
+            $member_verif_setuju = 0;
+            $member_verif_tolak = 0;
             foreach ($data_member['grafik_member'] as $value) {
                 // echo $value['pusat_verif'].'<br><br>';
                 if($value['cabang_verif'] == 1){
@@ -356,38 +362,38 @@ class PublicController extends Controller
             session([
                 'pabi_member_verif_belum' => $member_verif_belum
                 , 'pabi_member_verif_setuju' => $member_verif_setuju
-                , 'pabi_member_verif_tolak' => $member_verif_tolak 
+                , 'pabi_member_verif_tolak' => $member_verif_tolak
 
                 , 'pabi_event_akan_datang_cabang_pusat' => $grafik_event_cabang['event_akan_datang_cabang']
 
-                , 'pabi_event_akan_datang_cabang' 
+                , 'pabi_event_akan_datang_cabang'
                     => $grafik_event_cabang['event_akan_datang_cabang']
-                , 'pabi_event_selesai_cabang' 
-                    => $grafik_event_cabang['event_selesai_cabang'] 
- 
-                , 'pabi_event_belum_verif_bayar_cabang' 
-                    => $grafik_event_cabang['event_belum_verif_bayar_cabang'] 
+                , 'pabi_event_selesai_cabang'
+                    => $grafik_event_cabang['event_selesai_cabang']
 
-                , 'pabi_borang_belum_verif_admin_cabang' 
-                    => $grafik_event_cabang['borang_belum_verif_admin_cabang'] 
-                , 'pabi_borang_setuju_verif_admin_cabang' 
-                    => $grafik_event_cabang['borang_setuju_verif_admin_cabang'] 
-                , 'pabi_borang_tolak_verif_admin_cabang' 
-                    => $grafik_event_cabang['borang_tolak_verif_admin_cabang'] 
+                , 'pabi_event_belum_verif_bayar_cabang'
+                    => $grafik_event_cabang['event_belum_verif_bayar_cabang']
 
-                , 'pabi_pindah_cabang_asal_belum_verif' 
-                    => $grafik_event_cabang['pindah_cabang_asal_belum_verif'] 
-                , 'pabi_pindah_cabang_asal_sudah_verif' 
-                    => $grafik_event_cabang['pindah_cabang_asal_sudah_verif'] 
+                , 'pabi_borang_belum_verif_admin_cabang'
+                    => $grafik_event_cabang['borang_belum_verif_admin_cabang']
+                , 'pabi_borang_setuju_verif_admin_cabang'
+                    => $grafik_event_cabang['borang_setuju_verif_admin_cabang']
+                , 'pabi_borang_tolak_verif_admin_cabang'
+                    => $grafik_event_cabang['borang_tolak_verif_admin_cabang']
 
-                , 'pabi_pindah_cabang_tujuan_belum_verif' 
-                    => $grafik_event_cabang['pindah_cabang_tujuan_belum_verif'] 
-                , 'pabi_pindah_cabang_tujuan_sudah_verif' 
-                    => $grafik_event_cabang['pindah_cabang_tujuan_sudah_verif'] 
+                , 'pabi_pindah_cabang_asal_belum_verif'
+                    => $grafik_event_cabang['pindah_cabang_asal_belum_verif']
+                , 'pabi_pindah_cabang_asal_sudah_verif'
+                    => $grafik_event_cabang['pindah_cabang_asal_sudah_verif']
+
+                , 'pabi_pindah_cabang_tujuan_belum_verif'
+                    => $grafik_event_cabang['pindah_cabang_tujuan_belum_verif']
+                , 'pabi_pindah_cabang_tujuan_sudah_verif'
+                    => $grafik_event_cabang['pindah_cabang_tujuan_sudah_verif']
 
 
             ]);
-        } else { // SUPERADMIN 
+        } else { // SUPERADMIN
 
         }
     }
@@ -401,12 +407,12 @@ class PublicController extends Controller
         $grafik_rs = $data_rs['grafik_rs'];
 
         session([
-            'pabi_borang_belum_verif_rs' 
-            => $grafik_rs['borang_belum_verif_rs'] 
-            , 'pabi_borang_setuju_verif_rs' 
-            => $grafik_rs['borang_setuju_verif_rs'] 
-            , 'pabi_borang_tolak_verif_rs' 
-            => $grafik_rs['borang_tolak_verif_rs'] 
+            'pabi_borang_belum_verif_rs'
+            => $grafik_rs['borang_belum_verif_rs']
+            , 'pabi_borang_setuju_verif_rs'
+            => $grafik_rs['borang_setuju_verif_rs']
+            , 'pabi_borang_tolak_verif_rs'
+            => $grafik_rs['borang_tolak_verif_rs']
         ]);
     }
 
@@ -426,7 +432,7 @@ class PublicController extends Controller
             , 'pabi_event_akan_datang' => $data_member['event_akan_datang']
             , 'pabi_pusat_nama' => $data_member['admin_pusat_nama']
             , 'pabi_cabang_nama' => $data_member['admin_cabang_nama']
-            
+
             , 'pabi_min_poin' => $data_member['min_poin']
 
             , 'pabi_poin_total' => $data_member['poin_total']
