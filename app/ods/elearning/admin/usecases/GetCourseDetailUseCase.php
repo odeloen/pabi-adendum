@@ -5,8 +5,9 @@ namespace App\Ods\Elearning\Admin\Usecases;
 
 use App\Ods\Core\Requests\UseCaseRequest;
 use App\Ods\Core\Requests\UseCaseResponse;
+use App\Ods\Elearning\Core\Entities\Quizzes\AcceptedQuiz;
 
-class GetCourseDetailUseCase 
+class GetCourseDetailUseCase
 {
     public function execute($useCaseRequest) : UseCaseResponse
     {
@@ -17,7 +18,7 @@ class GetCourseDetailUseCase
         $categoryRepository = $useCaseRequest->categoryRepository;
         $courseID = $useCaseRequest->courseID;
 
-                
+
 
         try {
             $course = $courseRepository->find($courseID);
@@ -57,6 +58,13 @@ class GetCourseDetailUseCase
         }
 
         try {
+            $quiz = AcceptedQuiz::findByCourseID($courseID);
+        } catch (\Exception $e) {
+            $response = UseCaseResponse::createErrorResponse('Gagal tersambung dengan quiz terkait');
+            return $response;
+        }
+
+        try {
             $categories = $categoryRepository->all();
         } catch (\Throwable $th) {
             $response = UseCaseResponse::createErrorResponse('Gagal tersambung dengan daftar kategori');
@@ -67,6 +75,7 @@ class GetCourseDetailUseCase
             'lecturer' => $lecturer,
             'course' => $course,
             'categories' => $categories,
+            'quiz' => $quiz,
         ];
         // dd($data);
 

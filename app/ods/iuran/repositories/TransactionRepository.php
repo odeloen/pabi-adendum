@@ -3,16 +3,21 @@
 namespace App\Ods\Iuran\Repositories;
 
 use App\Ods\Iuran\Entities\Transactions\Transaction;
+use App\Ods\Iuran\Ext\Midtrans\MidtransPort;
+use App\Ods\Iuran\Ext\Midtrans\MidtransTransaction;
 use App\Ods\Utils\Guzzle\KeuanganAPITrait;
+use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\Throw_;
+use Ramsey\Uuid\Uuid;
 
 class TransactionRepository
 {
     use KeuanganAPITrait;
 
-    public function create($member, $tuition, $method){
-        return Transaction::create($member, $tuition, $method);
-    }
-
+    /**
+     * @param $transactionID
+     * @return Transaction
+     */
     public function find($transactionID){
         return Transaction::find($transactionID);
     }
@@ -33,7 +38,49 @@ class TransactionRepository
         return $transactions;
     }
 
-    public function save($transaction){
+    public function findByMemberAndTuition($member, $tuitionID){
+        $transaction = Transaction::where('user_id', $member->id)
+                                    ->where('payable_type', 'Tuition')
+                                    ->where('payable_id', $tuitionID)
+                                    ->first();
+        return $transaction;
+    }
+
+    /**
+     * @param Transaction $transaction
+     * @return String
+     * @throws \Throwable
+     */
+    public function insert(Transaction $transaction){
+        DB::connection('odssql')->beginTransaction();
+
+        $transaction->save();
+
+        $midtransTransaction = new MidtransTransaction();
+        $midtransTransaction->id = Uuid::uuid4()->toString();
+        $midtransTransaction->transaction_id = $transaction->id;
+        $midtransTransaction->save();
+
+        $midtransPort = new MidtransPort();
+
+        try {
+            $token = $midtransPort->notifyTransaction($midtransTransaction->id, $transaction->amount);
+        } catch (\Throwable $throwable) {
+            DB::connection('odssql')->rollBack();
+            throw $throwable;
+        }
+
+        if (!isset($token)) {
+            DB::connection('odssql')->rollBack();
+            throw new \Exception();
+        }
+
+        DB::connection('odssql')->commit();
+
+        return $token;
+    }
+
+    public function save(Transaction $transaction){
         $transaction->save();
     }
 

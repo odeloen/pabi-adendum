@@ -10,13 +10,12 @@ class TuitionRepository
         return Tuition::all();
     }
 
+    /**
+     * @param $tuitionID
+     * @return Tuition
+     */
     public function find($tuitionID){
         return Tuition::find($tuitionID);
-    }
-
-    public function create($year, $amount){
-        $tuition = Tuition::create($year, $amount);
-        return $tuition;
     }
 
     public function save($tuition){

@@ -44,4 +44,6 @@ Route::namespace('Api')->prefix('api')->middleware(['api'])->group(function () {
     Route::post('member/transaksi/buat', 'MemberAPIController@createTuitionTransaction');
     Route::post('member/transaksi/ubah', 'MemberAPIController@updateTuitionTransaction');
     Route::post('member/transaksi/unggah', 'MemberAPIController@uploadReceipt');
+
+    Route::post('midtrans', 'MidtransController@handleNotification');
 });

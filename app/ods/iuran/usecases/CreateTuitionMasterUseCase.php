@@ -3,19 +3,21 @@
 namespace App\Ods\Iuran\UseCases;
 
 use App\Ods\Core\Requests\UseCaseResponse;
+use App\Ods\Iuran\Entities\Payables\Tuition;
 use App\Ods\Iuran\Policies\TuitionUniqueYearPolicy;
+use App\Ods\Iuran\Repositories\TuitionRepository;
 
 class CreateTuitionMasterUseCase
 {
     private $tuitionRepository;
 
-    public function __construct($tuitionRepository)
+    public function __construct(TuitionRepository $tuitionRepository)
     {
         $this->tuitionRepository = $tuitionRepository;
     }
 
     public function execute($year, $amount){
-        $tuition = $this->tuitionRepository->create($year, $amount);
+        $tuition = Tuition::create($year, $amount);
 
         $policy = new TuitionUniqueYearPolicy($this->tuitionRepository, $tuition);
 

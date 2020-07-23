@@ -3,18 +3,30 @@
 namespace App\Ods\Iuran\UseCases;
 
 use App\Ods\Core\Requests\UseCaseResponse;
+use App\Ods\Iuran\Repositories\TuitionRepository;
 
 class UpdateTuitionMasterUseCase
 {
     private $tuitionRepository;
 
-    public function __construct($tuitionRepository)
+    public function __construct(TuitionRepository $tuitionRepository)
     {
         $this->tuitionRepository = $tuitionRepository;
     }
 
     public function execute($tuitionID, $amount){
-        $tuition = $this->tuitionRepository->find($tuitionID);
+        try {
+            $tuition = $this->tuitionRepository->find($tuitionID);
+        } catch (\Exception $exception){
+            $response = UseCaseResponse::createErrorResponse('Gagal mencari iuran');
+            return $response;
+        }
+
+        if (!isset($tuition)){
+            $response = UseCaseResponse::createErrorResponse('Iuran tidak ditemukan');
+            return $response;
+        }
+
         $tuition->setAmount($amount);
 
         try {
@@ -24,8 +36,7 @@ class UpdateTuitionMasterUseCase
             return $response;
         }
 
-        $message = 'Berhasil memperbarui iuran';
-        $response = UseCaseResponse::createMessageResponse($message);
+        $response = UseCaseResponse::createMessageResponse('Berhasil memperbarui iuran');
 
         return $response;
     }

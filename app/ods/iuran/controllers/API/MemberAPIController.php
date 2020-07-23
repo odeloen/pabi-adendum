@@ -57,10 +57,10 @@ class MemberAPIController extends Controller
 
         $useCaseRequest = new UseCaseRequest(null, $member);
         $useCaseRequest->tuitions = Tuition::all();
-        
+
         $paymentMethodRepository = new PaymentMethodRepository;
         $accountRepository = new AccountRepository;
-    
+
         $useCase = new GetMemberTuitionListUseCase(
             $this->tuitionRepository,
             $this->transactionRepository,
@@ -76,7 +76,6 @@ class MemberAPIController extends Controller
         $validator = Validator::make($request->all(), [
             'tuition_id' => 'required',
             'account_id' => 'required',
-            'method_id' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -86,18 +85,14 @@ class MemberAPIController extends Controller
         // $member = $this->memberRepository->findAuthenticated();
         $member = $this->memberRepository->find($request->account_id);
         $tuitionID = $request->tuition_id;
-        $method = $request->method_id;
-
-        $useCaseRequest = new UseCaseRequest($request, $member);
-        $useCaseRequest->transaction = new Transaction();
-        $useCaseRequest->tuition = Tuition::find($request->tuition_id);
+        $method = 'Midtrans';
 
         $useCase = new CreateTuitionTransactionUseCase(
             $this->tuitionRepository,
             $this->transactionRepository
         );
         $response = $useCase->execute($member, $tuitionID, $method);
-        
+
         return response()->json($response);
     }
 

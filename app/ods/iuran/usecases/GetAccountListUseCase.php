@@ -4,7 +4,7 @@ namespace App\Ods\Iuran\UseCases;
 
 use App\Ods\Core\Requests\UseCaseResponse;
 
-class GetAccountListUseCase 
+class GetAccountListUseCase
 {
     private $accountRepository;
 
@@ -17,9 +17,9 @@ class GetAccountListUseCase
 
         $data = [
             'accounts' => $accounts,
-        ];        
+        ];
 
-        $response = new UseCaseResponse($data, null, null);
+        $response = UseCaseResponse::createDataResponse($data);
 
         return $response;
     }

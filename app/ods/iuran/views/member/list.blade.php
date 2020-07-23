@@ -3,6 +3,11 @@
 setlocale(LC_TIME,"id_ID");
 Carbon\Carbon::setLocale('id');
 ?>
+@section('addcss')
+    <script type="text/javascript"
+            src="https://app.sandbox.midtrans.com/snap/snap.js"
+            data-client-key="{{env('ODS_MIDTRANS_CLIENT_KEY')}}"></script>
+@endsection
 @section('content')
 <div class="panel panel-primary">
     <div class="panel-heading panel-indigo">
@@ -23,10 +28,9 @@ Carbon\Carbon::setLocale('id');
                 @if (!empty($tuitions))
                     @foreach ($tuitions as $tuition)
                     <tr
-                    @if ($tuition->transaction == null)
+                    @if ($tuition->transaction == null || $tuition->transaction->inProgress())
                         style="background:#999;color:white" onmouseover="this.style.backgroundColor='#6b6b6b'" onmouseout="this.style.backgroundColor='#999'"
-                    @elseif ($tuition->transaction->inProgress())
-                        style="background:#ffff00;color:#141414" onmouseover="this.style.backgroundColor='#e5e500'" onmouseout="this.style.backgroundColor='#ffff00'"
+
                     @endif
                     >
                         <td><center>{{$tuition->year}}</center></td>
@@ -38,7 +42,7 @@ Carbon\Carbon::setLocale('id');
                                 -
                             @endif
                         </center></td>
-                        @if (!$tuition->onPayment())
+                        @if (!$tuition->onPayment() || $tuition->transaction->inProgress())
                             <td style="width:1%;white-space:nowrap;"><center><span class="label label-danger">BELUM BAYAR</span><center></td>
                             <td class="text-center">
                                 <button onclick="onClickUnpaid({{$tuition->id}})" type="button" class="btn btn-default" data-toggle="modal" data-target="#modal_unpaid"> <span>Bayar</span></button>
@@ -92,41 +96,6 @@ Carbon\Carbon::setLocale('id');
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-lg-3">Metode Pembayaran</label>
-                        <div class=" col-lg-9">
-                            <select name="method_id" class="select" id="unpaid_payment_method" data-placeholder="Pilih Metode Pembayaran" style="border-bottom-color:#009688;" onchange="onSelectUnpaidPaymentMethod()">
-                                <option id="-" value="">-</option>
-                                @if (!empty($paymentMethods))
-                                    @foreach ($paymentMethods as $paymentMethod)
-                                        <option id="{{$paymentMethod->account}}" value="{{$paymentMethod->id}}">{{$paymentMethod->name}}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Rekening Tujuan</label>
-                        <div class="col-lg-9">
-                            <input id="unpaid_account" type="text" class="form-control" readonly="readonly" value="-">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                            <label class="control-label col-lg-3">Rekening yang Digunakan</label>
-                            <div class=" col-lg-9">
-                                <select name="account_id" class="select" data-placeholder="Pilih Nomor Rekening" style="border-bottom-color:#009688;">
-                                    <option value="">-</option>
-                                    @if (!empty($accounts))
-                                        <?php $j=0?>
-                                        @foreach ($accounts as $account)
-                                            <option value="{{$j}}">{{$account->bank_name}} - {{$account->number}}</option>
-                                            <?php $j++?>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-                    <div class="form-group">
                         <?php $tac = App\Ods\Iuran\Entities\TAC::getInstance() ?>
                         <label class="control-label col-lg-12">
                             <input type="checkbox" class="styled" name="term">
@@ -137,7 +106,7 @@ Carbon\Carbon::setLocale('id');
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-link" data-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-primary" style="background:#4C568A; color:white;">Buat Transaksi</button>
+                <button id="pay-button" type="button" class="btn btn-primary" style="background:#4C568A; color:white;">Buat Transaksi</button>
             </div>
         </form>
         </div>
@@ -166,146 +135,146 @@ Carbon\Carbon::setLocale('id');
         </div>
     </div>
 </div>
-<div id="modal_onProcess" class="modal fade" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" >&times;</button>
-                <h3 id="progress_title" class="modal-title"> - </h3>
-            </div>
+{{--<div id="modal_onProcess" class="modal fade" tabindex="-1">--}}
+{{--    <div class="modal-dialog">--}}
+{{--        <div class="modal-content">--}}
+{{--            <div class="modal-header">--}}
+{{--                <button type="button" class="close" data-dismiss="modal" >&times;</button>--}}
+{{--                <h3 id="progress_title" class="modal-title"> - </h3>--}}
+{{--            </div>--}}
 
-            <div class="modal-body">
-                <h6 id="progress_description"> - </h6>
-                <div class="row">
-                    <div class="col-sm-4"><img src="{{asset('template/images/mandiri.png')}}" class="img-responsive" alt="Mandiri" width="100%"></div>
-                    <div class="col-sm-8" style="align-items:center;">
-                        <h6>Nomor Rekening</h6>
-                        <h4 id="progress_account"> - </h4>
-                        <a onclick="copyToClipboard('progress_account')">Salin</a>
-                    </div>
-                </div>
+{{--            <div class="modal-body">--}}
+{{--                <h6 id="progress_description"> - </h6>--}}
+{{--                <div class="row">--}}
+{{--                    <div class="col-sm-4"><img src="{{asset('template/images/mandiri.png')}}" class="img-responsive" alt="Mandiri" width="100%"></div>--}}
+{{--                    <div class="col-sm-8" style="align-items:center;">--}}
+{{--                        <h6>Nomor Rekening</h6>--}}
+{{--                        <h4 id="progress_account"> - </h4>--}}
+{{--                        <a onclick="copyToClipboard('progress_account')">Salin</a>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                <hr>
-                <h6>Nominal</h6>
-                <h4 id="progress_amount"> - </h4>
-                <a onclick="copyToClipboard('progress_amount')">Salin Jumlah</a>
-                <hr>
+{{--                <hr>--}}
+{{--                <h6>Nominal</h6>--}}
+{{--                <h4 id="progress_amount"> - </h4>--}}
+{{--                <a onclick="copyToClipboard('progress_amount')">Salin Jumlah</a>--}}
+{{--                <hr>--}}
 
-                <h6> Nomor Rekening Anda </h6>
-                <h4 id="progress_used_account"> - </h4>
-                <div class="row text-center">
-                    <button id="progress_change_method_button" onclick="onClickChangeMethod()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_changeMethod" style="background:#4C568A; color:white;" >Ubah metode</button>
-                </div>
-                <hr>
-                <div class="row text-center">
-                    <button id="progress_upload_button" onclick="onClickUpload()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_upload" style="background:#4C568A; color:white;">Upload Bukti</button>
-                </div>
-                <div class="row text-center" style="margin-top:10px;">
-                    <center><img id="progress_receipt" src="" class="img-responsive" alt="Tidak ada file bukti." width="80%" style="font-style:italic; max-height:250px;width:auto;"></center>
-                </div>
-                <hr class="progress_comment">
-                <div class="form-group progress_comment">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h6 style="color:#4C568A"><strong>Alasan Ditolak</strong></h6>
-                            <blockquote style="border-left:10px solid #CB4774; background:#FBE9E7;">
-                                <p id="progress_comment"> Bukti terlampir tidak valid </p>
-                            </blockquote>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <p> Lihat kembali <a href="{{env('APP_URL')}}/storage/{{$tac->path}}">Syarat dan Ketentuan</a> dari pembayaran iuran tahunan.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="modal_changeMethod" class="modal fade" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" >&times;</button>
-                <h3 class="modal-title">Metode Pembayaran</h3>
-            </div>
+{{--                <h6> Nomor Rekening Anda </h6>--}}
+{{--                <h4 id="progress_used_account"> - </h4>--}}
+{{--                <div class="row text-center">--}}
+{{--                    <button id="progress_change_method_button" onclick="onClickChangeMethod()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_changeMethod" style="background:#4C568A; color:white;" >Ubah metode</button>--}}
+{{--                </div>--}}
+{{--                <hr>--}}
+{{--                <div class="row text-center">--}}
+{{--                    <button id="progress_upload_button" onclick="onClickUpload()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_upload" style="background:#4C568A; color:white;">Upload Bukti</button>--}}
+{{--                </div>--}}
+{{--                <div class="row text-center" style="margin-top:10px;">--}}
+{{--                    <center><img id="progress_receipt" src="" class="img-responsive" alt="Tidak ada file bukti." width="80%" style="font-style:italic; max-height:250px;width:auto;"></center>--}}
+{{--                </div>--}}
+{{--                <hr class="progress_comment">--}}
+{{--                <div class="form-group progress_comment">--}}
+{{--                    <div class="row">--}}
+{{--                        <div class="col-sm-12">--}}
+{{--                            <h6 style="color:#4C568A"><strong>Alasan Ditolak</strong></h6>--}}
+{{--                            <blockquote style="border-left:10px solid #CB4774; background:#FBE9E7;">--}}
+{{--                                <p id="progress_comment"> Bukti terlampir tidak valid </p>--}}
+{{--                            </blockquote>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <hr>--}}
+{{--                <p> Lihat kembali <a href="{{env('APP_URL')}}/storage/{{$tac->path}}">Syarat dan Ketentuan</a> dari pembayaran iuran tahunan.</p>--}}
+{{--            </div>--}}
+{{--            <div class="modal-footer">--}}
+{{--                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
+{{--<div id="modal_changeMethod" class="modal fade" tabindex="-1">--}}
+{{--    <div class="modal-dialog">--}}
+{{--        <div class="modal-content">--}}
+{{--            <div class="modal-header">--}}
+{{--                <button type="button" class="close" data-dismiss="modal" >&times;</button>--}}
+{{--                <h3 class="modal-title">Metode Pembayaran</h3>--}}
+{{--            </div>--}}
 
-            <div class="modal-body">
-                <form action="{{route('member.tuition.update')}}" method="POST" class="form-horizontal">
-                    @csrf
-                    <input id="change_transaction" type="hidden" name="transaction_id">
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Metode Pembayaran</label>
-                        <div class=" col-lg-9">
-                            <select id="change_payment_method" onchange="onSelectChangePaymentMethod()" name="method_id" class="select" data-placeholder="Pilih Metode Pembayaran" style="border-bottom-color:#009688;">
-                                @if (!empty($paymentMethods))
-                                    @foreach ($paymentMethods as $paymentMethod)
-                                        <option id="{{$paymentMethod->account}}" value="{{$paymentMethod->id}}">{{$paymentMethod->name}}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
+{{--            <div class="modal-body">--}}
+{{--                <form action="{{route('member.tuition.update')}}" method="POST" class="form-horizontal">--}}
+{{--                    @csrf--}}
+{{--                    <input id="change_transaction" type="hidden" name="transaction_id">--}}
+{{--                    <div class="form-group">--}}
+{{--                        <label class="control-label col-lg-3">Metode Pembayaran</label>--}}
+{{--                        <div class=" col-lg-9">--}}
+{{--                            <select id="change_payment_method" onchange="onSelectChangePaymentMethod()" name="method_id" class="select" data-placeholder="Pilih Metode Pembayaran" style="border-bottom-color:#009688;">--}}
+{{--                                @if (!empty($paymentMethods))--}}
+{{--                                    @foreach ($paymentMethods as $paymentMethod)--}}
+{{--                                        <option id="{{$paymentMethod->account}}" value="{{$paymentMethod->id}}">{{$paymentMethod->name}}</option>--}}
+{{--                                    @endforeach--}}
+{{--                                @endif--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Nomor Rekening:</label>
-                        <div class="col-lg-9">
-                            <input id="change_account" type="text" class="form-control" readonly="readonly" value="2 3 2 13 213 21312321">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Rekening yang Digunakan</label>
-                        <div class=" col-lg-9">
-                            <select id="change_used_account" name="account_id" class="select" data-placeholder="Pilih Nomor Rekening" style="border-bottom-color:#009688;">
-                                @if (!empty($accounts))
-                                    <?php $j=0?>
-                                    @foreach ($accounts as $account)
-                                        <option value="{{$j}}">{{$account->bank_name}} - {{$account->number}}</option>
-                                        <?php $j++?>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
+{{--                    <div class="form-group">--}}
+{{--                        <label class="control-label col-lg-3">Nomor Rekening:</label>--}}
+{{--                        <div class="col-lg-9">--}}
+{{--                            <input id="change_account" type="text" class="form-control" readonly="readonly" value="2 3 2 13 213 21312321">--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="form-group">--}}
+{{--                        <label class="control-label col-lg-3">Rekening yang Digunakan</label>--}}
+{{--                        <div class=" col-lg-9">--}}
+{{--                            <select id="change_used_account" name="account_id" class="select" data-placeholder="Pilih Nomor Rekening" style="border-bottom-color:#009688;">--}}
+{{--                                @if (!empty($accounts))--}}
+{{--                                    <?php $j=0?>--}}
+{{--                                    @foreach ($accounts as $account)--}}
+{{--                                        <option value="{{$j}}">{{$account->bank_name}} - {{$account->number}}</option>--}}
+{{--                                        <?php $j++?>--}}
+{{--                                    @endforeach--}}
+{{--                                @endif--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link" data-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-primary" style="background:#4C568A; color:white;">Simpan</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-<div id="modal_upload" class="modal fade" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" >&times;</button>
-                <h3 class="modal-title">Upload Bukti Pembayaran</h3>
-            </div>
+{{--            </div>--}}
+{{--            <div class="modal-footer">--}}
+{{--                <button type="button" class="btn btn-link" data-dismiss="modal">Batal</button>--}}
+{{--                <button type="submit" class="btn btn-primary" style="background:#4C568A; color:white;">Simpan</button>--}}
+{{--            </div>--}}
+{{--            </form>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
+{{--<div id="modal_upload" class="modal fade" tabindex="-1">--}}
+{{--    <div class="modal-dialog">--}}
+{{--        <div class="modal-content">--}}
+{{--            <div class="modal-header">--}}
+{{--                <button type="button" class="close" data-dismiss="modal" >&times;</button>--}}
+{{--                <h3 class="modal-title">Upload Bukti Pembayaran</h3>--}}
+{{--            </div>--}}
 
-            <div class="modal-body">
-                <form action="{{route('member.tuition.upload')}}" method="POST" class="form-horizontal"  enctype="multipart/form-data">
-                    @csrf
-                    <input id="upload_transaction" name="transaction_id" type="hidden">
-                    <div class="form-group" style="margin-left:1%; margin-right:1%">
-						<div>
-                            <center><input name="receipt" type="file" class="file-styled" accept="image/*" id="imgInp" style=" max-height:250px;width:auto;" autocomplete="off"></center>
-                            <img id="upload_receipt" src="" alt="" style="width:100%; margin-top:10px;"/>
-                        </div>
-                        <img id="result" width="100%" style="margin-top:1%;"/>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link" data-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-primary" style="background:#4C568A; color:white;">Simpan</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
+{{--            <div class="modal-body">--}}
+{{--                <form action="{{route('member.tuition.upload')}}" method="POST" class="form-horizontal"  enctype="multipart/form-data">--}}
+{{--                    @csrf--}}
+{{--                    <input id="upload_transaction" name="transaction_id" type="hidden">--}}
+{{--                    <div class="form-group" style="margin-left:1%; margin-right:1%">--}}
+{{--						<div>--}}
+{{--                            <center><input name="receipt" type="file" class="file-styled" accept="image/*" id="imgInp" style=" max-height:250px;width:auto;" autocomplete="off"></center>--}}
+{{--                            <img id="upload_receipt" src="" alt="" style="width:100%; margin-top:10px;"/>--}}
+{{--                        </div>--}}
+{{--                        <img id="result" width="100%" style="margin-top:1%;"/>--}}
+{{--                    </div>--}}
+{{--            </div>--}}
+{{--            <div class="modal-footer">--}}
+{{--                <button type="button" class="btn btn-link" data-dismiss="modal">Batal</button>--}}
+{{--                <button type="submit" class="btn btn-primary" style="background:#4C568A; color:white;">Simpan</button>--}}
+{{--            </div>--}}
+{{--            </form>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
 <div id="modal_paid" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -592,6 +561,52 @@ Carbon\Carbon::setLocale('id');
             $(".styled").uniform();
         });
         //end code
+    </script>
+    <script type="text/javascript">
+        var userID = {!! request()->session()->get('pabi_user_id') !!}
+        var payButton = document.getElementById('pay-button');
+
+        function ajaxGetToken(tuitionID, callback){
+            var snapToken;
+            // Request get token to your server & save result to snapToken variable
+            $.ajax({
+                url: "{{env('APP_URL')}}/iuran/api/member/transaksi/buat",
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader("Authorization", "{{request()->session()->get('pabi_token_api')}}");
+                },
+                method: "post",
+                dataType : 'json',
+                data : {
+                    account_id : userID,
+                    tuition_id : tuitionID,
+                },
+                success: function(response) {
+                    var snapToken = response.data.token
+
+                    if(snapToken){
+                        callback(null, snapToken);
+                    } else {
+                        callback(new Error('Failed to fetch snap token'),null);
+                    }
+                },
+                error: function(xhr) {
+                    console.log(xhr)
+                }
+            });
+        }
+
+        payButton.addEventListener('click', function () {
+            var tuitionID = $('#unpaid_tuition_id').val()
+
+            snap.show();
+            ajaxGetToken(tuitionID, function(error, snapToken){
+                if(error){
+                    snap.hide();
+                } else {
+                    snap.pay(snapToken);
+                }
+            });
+        });
     </script>
 @endif
 @endsection

@@ -3,14 +3,14 @@
 namespace App\Ods\Iuran\UseCases;
 
 use App\Ods\Core\Requests\UseCaseResponse;
+use App\Ods\Iuran\Repositories\TransactionRepository;
 use Illuminate\Support\Facades\DB;
-use App\Ods\Notification\Usecases\CreateNotificationUseCase;
 
-class AcceptTuitionVerificationListUseCase
+class AcceptTuitionVerificationUseCase
 {
     private $transactionRepository;
 
-    public function __construct($transactionRepository)
+    public function __construct(TransactionRepository $transactionRepository)
     {
         $this->transactionRepository = $transactionRepository;
     }
@@ -24,25 +24,22 @@ class AcceptTuitionVerificationListUseCase
             return $response;
         }
 
-        DB::beginTransaction();
-        $transaction->accept();
-        try {
-            $this->transactionRepository->save($transaction);
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            $response = UseCaseResponse::createErrorResponse('Gagal menerima pembayaran');
+        if (!isset($transaction)){
+            $response = UseCaseResponse::createErrorResponse('Pembayaran tidak ditemukan');
             return $response;
         }
 
+        $transaction->accept();
+
+        DB::connection('odssql')->beginTransaction();
         try {
-            $createNotif = new CreateNotificationUseCase();
-            $createNotif->execute($transaction->user_id, "Pembayaran iuran diterima", "Pembayaran iuran untuk tahun ".$transaction->tuition->year." sudah diterima");
+            $this->transactionRepository->save($transaction);
         } catch (\Throwable $th) {
-            DB::rollBack();
+            DB::connection('odssql')->rollBack();
             $response = UseCaseResponse::createErrorResponse('Gagal menerima pembayaran');
             return $response;
         }
-        DB::commit();
+        DB::connection('odssql')->commit();
 
         $response = UseCaseResponse::createMessageResponse('Berhasil menerima pembayaran');
 

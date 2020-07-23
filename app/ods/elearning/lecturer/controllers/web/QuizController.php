@@ -24,19 +24,20 @@ class QuizController extends Controller
             return back();
         }
 
-        DB::beginTransaction();
-        try {
-            if (!isset($quiz)) {
+        // if quiz is not found, then create new quiz for the course
+        if (!isset($quiz)) {
+            DB::beginTransaction();
+            try {
                 $quiz = OriginalQuiz::create($courseID);
                 $question = OriginalQuestion::create($quiz->id, 1);
                 $quiz->questions;
+            } catch (\Exception $exception) {
+                DB::rollBack();
+                Alert::error("Error", $exception->getMessage());
+                return back();
             }
-        } catch (\Exception $exception) {
-            DB::rollBack();
-            Alert::error("Error", $exception->getMessage());
-            return back();
+            DB::commit();
         }
-        DB::commit();
 
         return redirect()->route('lecturer.question.show', [$courseID, $quiz->id, $quiz->questions[0]->id]);
     }

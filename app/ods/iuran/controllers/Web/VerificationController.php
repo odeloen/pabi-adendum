@@ -12,7 +12,7 @@ use App\Ods\Auth\Repositories\AdminRepository;
 use App\Ods\Auth\Repositories\MemberRepository;
 use App\Ods\Iuran\Repositories\TransactionRepository;
 use App\Ods\Iuran\UseCases\GetTuitionVerificationListUseCase;
-use App\Ods\Iuran\UseCases\AcceptTuitionVerificationListUseCase;
+use App\Ods\Iuran\UseCases\AcceptTuitionVerificationUseCase;
 use App\Ods\Iuran\UseCases\DeclineTuitionVerificationListUseCase;
 use Illuminate\Support\Facades\Validator;
 use App\Ods\Iuran\UseCases\DeclineTuitionVerificationUseCase;
@@ -51,7 +51,7 @@ class VerificationController extends Controller
 
         $transactionRepository = new TransactionRepository;
 
-        $useCase = new AcceptTuitionVerificationListUseCase($transactionRepository);
+        $useCase = new AcceptTuitionVerificationUseCase($transactionRepository);
         $response = $useCase->execute($request->transaction_id);
 
         Alert::fromResponse($response);
