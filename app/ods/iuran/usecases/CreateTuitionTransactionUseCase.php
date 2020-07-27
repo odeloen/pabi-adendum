@@ -45,7 +45,7 @@ class CreateTuitionTransactionUseCase
 
         if (!isset($transaction)) $transaction = Transaction::create($member, $tuition, $method);
 
-        $token = $this->transactionRepository->insert($transaction);
+        $token = $this->transactionRepository->insert($tuition, $transaction);
 
         try {
 

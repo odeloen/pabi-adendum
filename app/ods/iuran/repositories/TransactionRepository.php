@@ -2,9 +2,11 @@
 
 namespace App\Ods\Iuran\Repositories;
 
+use App\Ods\Iuran\Entities\Payables\Tuition;
 use App\Ods\Iuran\Entities\Transactions\Transaction;
-use App\Ods\Iuran\Ext\Midtrans\MidtransPort;
+use App\Ods\Iuran\Ext\Midtrans\MidtransPaymentVerificator;
 use App\Ods\Iuran\Ext\Midtrans\MidtransTransaction;
+use App\Ods\Iuran\Ext\Midtrans\MidtransTransactionRepository;
 use App\Ods\Utils\Guzzle\KeuanganAPITrait;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Stmt\Throw_;
@@ -51,20 +53,15 @@ class TransactionRepository
      * @return String
      * @throws \Throwable
      */
-    public function insert(Transaction $transaction){
+    public function insert(Tuition $tuition, Transaction $transaction){
         DB::connection('odssql')->beginTransaction();
 
         $transaction->save();
 
-        $midtransTransaction = new MidtransTransaction();
-        $midtransTransaction->id = Uuid::uuid4()->toString();
-        $midtransTransaction->transaction_id = $transaction->id;
-        $midtransTransaction->save();
-
-        $midtransPort = new MidtransPort();
+        $midtransTransactionRepository = new MidtransTransactionRepository();
 
         try {
-            $token = $midtransPort->notifyTransaction($midtransTransaction->id, $transaction->amount);
+            $token = $midtransTransactionRepository->insert($tuition, $transaction);
         } catch (\Throwable $throwable) {
             DB::connection('odssql')->rollBack();
             throw $throwable;

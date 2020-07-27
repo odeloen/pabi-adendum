@@ -36,8 +36,8 @@ Carbon\Carbon::setLocale('id');
                         <td><center>{{$tuition->year}}</center></td>
                         <td><center>Rp. {{number_format($tuition->amount, 2, ',', '.')}}</center></td>
                         <td><center>
-                            @if ($tuition->onPayment() && $tuition->transaction->receipt_date != null)
-                                {{$tuition->transaction->getReceiptDate()}}
+                            @if (isset($tuition->transaction) && $tuition->transaction->isDone())
+                                {{$tuition->transaction->getVerifiedDate()}}
                             @else
                                 -
                             @endif
@@ -295,20 +295,6 @@ Carbon\Carbon::setLocale('id');
                         <label class="control-label col-lg-3">Nominal</label>
                         <div class="col-lg-9">
                             <input id="paid_amount" type="text" class="form-control" readonly="readonly" value="Rp 1.000.000,-">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Metode Pembayaran</label>
-                        <div class=" col-lg-9">
-                            <input id="paid_method" type="text" class="form-control" readonly="readonly" value="Transfer Virtual Akun">
-                            <input id="paid_account" type="text" class="form-control" readonly="readonly" value="2 3 2 13 213 21312321">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-lg-3">Rekening yang Digunakan</label>
-                        <div class="col-lg-9">
-                            <input id="paid_used_account" type="text" class="form-control" readonly="readonly" value="Mandiri - 2 3 2 13 213 21312321">
                         </div>
                     </div>
                     <div class="form-group">

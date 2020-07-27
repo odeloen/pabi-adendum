@@ -34,7 +34,7 @@ class GetMemberTuitionListUseCase
         try {
             $tuitions = $this->tuitionRepository->all();
 
-//            $paymentMethods = $this->paymentMethodRepository->findByMember($member);
+            $paymentMethods = $this->paymentMethodRepository->findByMember($member);
             $accounts = $this->accountRepository->findByMember($member);
         } catch (\Throwable $th) {
             $response = UseCaseResponse::createErrorResponse('Gagal mendapatkan daftar iuran terkait');
@@ -46,7 +46,7 @@ class GetMemberTuitionListUseCase
                 $transactionOnTuition = $transactions->where('payable_id', $tuition->id)->first();
                 if ($transactionOnTuition != null){
                     $transactionOnTuition->account;
-//                    $transactionOnTuition->method = $transactionOnTuition->getPaymentMethod();
+                    $transactionOnTuition->method = $transactionOnTuition->getPaymentMethod();
                 }
                 $tuition->transaction = $transactionOnTuition;
             }
@@ -56,7 +56,7 @@ class GetMemberTuitionListUseCase
             'member' => $member,
             'accounts' => $accounts,
             'tuitions' => $tuitions,
-//            'paymentMethods' => $paymentMethods,
+            'paymentMethods' => $paymentMethods,
         ];
 
         $response = new UseCaseResponse($data, null, null);

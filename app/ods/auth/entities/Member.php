@@ -5,6 +5,18 @@ namespace App\Ods\Auth\Entities;
 use App\Ods\Core\Entities\OdsUser;
 use App\Ods\Utils\Model\OdsModelTrait;
 
+/**
+ * Class Member
+ * @package App\Ods\Auth\Entities
+ * @mixin \Eloquent
+ *
+ * Properties
+ * @property String $firstname
+ * @property String $lastname
+ * @property String $fullname
+ * @property String $email
+ * @property String $phonenumber
+ */
 class Member extends OdsUser
 {
     protected $connection = 'odssql';

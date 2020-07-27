@@ -45,7 +45,7 @@ class Transaction extends Model
 
     public function accept(){
         $this->status = 1;
-        $this->verified_date = Carbon::today();
+        $this->verified_date = Carbon::now();
     }
 
     public function decline($comment){

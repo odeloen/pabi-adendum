@@ -15,6 +15,7 @@ class PaymentMethod
         $paymentMethods = [
             new DirectTransferMethod($member),
             new VirtualAccountMethod($member),
+            new Midtrans($member),
         ];
 
         return $paymentMethods;
